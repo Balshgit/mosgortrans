@@ -44,13 +44,13 @@ def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]}, trigger='cron', hour=19, minute=11, second=42)
+    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]}, trigger='cron', hour=19, minute=12, second=42)
     scheduler.start()
 
 
 async def on_startup(dp) -> None:
     await bot.set_webhook(WEBHOOK_URL)
-    # asyncio_schedule()
+    asyncio_schedule()
 
 
 async def on_shutdown(dp):
