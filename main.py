@@ -16,9 +16,9 @@ dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
 cron_jobs = [
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 50, 'second': 10},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 51, 'second': 10},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 52, 'second': 10},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 53, 'second': 40},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 54, 'second': 10},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 55, 'second': 10},
     ]
 
 user_chat_ids = {'chat_ids': [417070387,
@@ -98,12 +98,8 @@ def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs=user_chat_ids,
-                      trigger='cron', day_of_week='mon-fri', hour=20, minute=40, second=10)
-    scheduler.add_job(send_message, kwargs=user_chat_ids,
-                      trigger='cron', day_of_week='mon-fri', hour=20, minute=43, second=20)
-    scheduler.add_job(send_message, kwargs=user_chat_ids,
-                      trigger='cron', day_of_week='mon-fri', hour=20, minute=45, second=42)
+    for cron in cron_jobs:
+        scheduler.add_job(send_message, **cron)
     scheduler.start()
 
 
@@ -119,8 +115,8 @@ async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
     # Close DB connection (if used)
-    await dp.storage.close()
-    await dp.storage.wait_closed()
+    await dispatcher.storage.close()
+    await dispatcher.storage.wait_closed()
 
     logger.warning('Bye!')
 
