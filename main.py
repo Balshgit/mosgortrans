@@ -16,9 +16,9 @@ dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
 cron_jobs = [
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 8, 'minute': 58, 'second': 0},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 9, 'minute': 3, 'second': 0},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 9, 'minute': 8, 'second': 0},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 21, 'minute': 11, 'second': 0},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 21, 'minute': 12, 'second': 0},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 21, 'minute': 13, 'second': 0},
     ]
 
 user_chat_ids = {'chat_ids': [417070387,
