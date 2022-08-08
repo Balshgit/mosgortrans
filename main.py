@@ -4,6 +4,7 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
+from aiogram.utils.callback_data import CallbackData
 from aiogram.utils.executor import start_webhook
 
 from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
@@ -14,6 +15,38 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
+stations_cb = CallbackData('station', 'direction')
+
+
+def get_keyboard() -> types.InlineKeyboardMarkup:
+    """
+    Generate keyboard with list of posts
+    """
+    markup = types.InlineKeyboardMarkup()
+
+    markup.row(
+        types.InlineKeyboardButton('Дом -> Офис', callback_data=stations_cb.new(direction='home->office')),
+        types.InlineKeyboardButton('Офис -> Дом', callback_data=stations_cb.new(direction='office->home')),
+    )
+    return markup
+
+
+@dp.callback_query_handler(stations_cb.filter(direction='home->office'))
+async def home_office(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
+
+    text = parse_site(driver=driver)
+
+    # or reply INTO webhook
+    return await query.answer(text)
+
+
+@dp.callback_query_handler(stations_cb.filter(direction='office->home'))
+async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
+
+    # or reply INTO webhook
+    return await query.answer('Hello World')
+
+
 @dp.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> SendMessage:
 
@@ -22,17 +55,11 @@ async def chat_id(message: types.Message) -> SendMessage:
 
 
 @dp.message_handler()
-async def echo(message: types.Message) -> SendMessage:
-    # Regular request
-    # await bot.send_message(message.chat.id, message.text)
-
-    text = parse_site(driver=driver)
-
-    # or reply INTO webhook
-    return SendMessage(message.chat.id, text)
+async def echo(message: types.Message) -> None:
+    await message.reply('Выбери остановку', reply_markup=get_keyboard())
 
 
-async def send_message(chat_ids: list[int]):
+async def send_message(chat_ids: list[int]) -> None:
     text = parse_site(driver=driver)
 
     await asyncio.gather(
