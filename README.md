@@ -1,9 +1,19 @@
 # MosGotTrans bot
 
-## Install 
+## Install & Update
 
 ```bash
-export API_TOKEN=secret-token
-cd ~/mosru
-poetry shell & python mos_gor.py
+cd ~/PycharmProjects/mosgortrans
+sudo systemctl stop mosgortrans.service
+git pull balshgit master
+sudo cp ~/Pycharmprojects/mosgortrans/* /opt/mosgortrans/ -r
+sudo systemctl start mosgortrans.service
+```
+
+## Clean
+
+```bash
+killall geckodriver
+killall firefox
+killall python
 ```

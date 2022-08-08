@@ -23,8 +23,7 @@ cron_jobs = [
 
 user_chat_ids = {'chat_ids': [417070387,
                               431571617,
-                              ]
-                 }
+                              ]}
 
 
 stations_cb = CallbackData('station', 'direction')
