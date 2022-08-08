@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mosgortrans"
+version = "0.1.0"
+description = "Bot to help with mosgortans"
+authors = ["Dmitry Afanasyev <Balshbox@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^2.21"
+selenium = "^4.3.0"
+httpx = "^0.23.0"
+wget = "^3.2"
+loguru = "^0.6.0"
+decouple = "^3.6"
+gunicorn = "^20.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
