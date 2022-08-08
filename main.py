@@ -44,7 +44,8 @@ def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]}, trigger='cron', hour=19, minute=12, second=42)
+    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]},
+                      trigger='cron', day='1,2,3,4,5', hour=19, minute=17, second=10)
     scheduler.start()
 
 
