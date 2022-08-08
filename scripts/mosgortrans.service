@@ -1,0 +1,11 @@
+[Unit]
+Description=MosGorTrans bot
+After=network.target
+
+[Service]
+Restart=always
+WorkingDirectory=/opt/mosgortrans
+ExecStart=scripts/start-bot.sh
+ExecStop=scripts/shutdown-bot.sh
+[Install]
+WantedBy=multi-user.target
