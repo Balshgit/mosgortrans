@@ -18,7 +18,6 @@ dp.middleware.setup(LoggingMiddleware())
 async def chat_id(message: types.Message):
 
     # or reply INTO webhook
-    asyncio_schedule()
     return SendMessage(message.chat.id, message.chat.id)
 
 
@@ -55,6 +54,7 @@ def asyncio_schedule():
 
 async def on_startup(dp) -> None:
     await bot.set_webhook(WEBHOOK_URL)
+    asyncio_schedule()
     # insert code here to run it after start
 
 
