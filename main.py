@@ -99,7 +99,7 @@ def asyncio_schedule() -> None:
 
     scheduler = AsyncIOScheduler()
     for cron in cron_jobs:
-        scheduler.add_job(send_message, **cron)
+        scheduler.add_job(send_message, kwargs=user_chat_ids, **cron)
     scheduler.start()
 
 
