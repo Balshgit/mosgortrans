@@ -12,7 +12,7 @@ from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
 
-from mosgortrans.settings import BASE_DIR, GECKO_DRIVER_VERSION
+from settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 logger.remove()
 logger.add(sink=sys.stdout, colorize=True, level='DEBUG',

@@ -5,7 +5,7 @@ from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
 
 from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
-from mosgortrans.settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
+from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
