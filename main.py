@@ -12,8 +12,19 @@ from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox
 from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
 bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware())
+dispatcher = Dispatcher(bot)
+dispatcher.middleware.setup(LoggingMiddleware())
+
+cron_jobs = [
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 50, 'second': 10},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 51, 'second': 10},
+        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 20, 'minute': 52, 'second': 10},
+    ]
+
+user_chat_ids = {'chat_ids': [417070387,
+                              # 431571617,
+                              ]
+                 }
 
 
 stations_cb = CallbackData('station', 'direction')
@@ -32,7 +43,7 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
     return markup
 
 
-@dp.callback_query_handler(stations_cb.filter(direction='home->office'))
+@dispatcher.callback_query_handler(stations_cb.filter(direction='home->office'))
 async def home_office(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
 
     text = parse_site(
@@ -46,7 +57,7 @@ async def home_office(query: types.CallbackQuery, callback_data: dict[str, str])
     return await query.message.edit_text(text, reply_markup=get_keyboard())
 
 
-@dp.callback_query_handler(stations_cb.filter(direction='office->home'))
+@dispatcher.callback_query_handler(stations_cb.filter(direction='office->home'))
 async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> Message:
 
     # or reply INTO webhook
@@ -59,14 +70,14 @@ async def office_home(query: types.CallbackQuery, callback_data: dict[str, str])
     return await query.message.edit_text(text, reply_markup=get_keyboard())
 
 
-@dp.message_handler(commands=['chatid'])
+@dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> SendMessage:
 
     # or reply INTO webhook
     return SendMessage(message.chat.id, message.chat.id)
 
 
-@dp.message_handler()
+@dispatcher.message_handler()
 async def echo(message: types.Message) -> None:
     await message.reply('Выбери остановку', reply_markup=get_keyboard())
 
@@ -86,24 +97,22 @@ async def send_message(chat_ids: list[int]) -> None:
 def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-    kwargs = {'chat_ids': [417070387, 431571617]}
-
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs=kwargs,
+    scheduler.add_job(send_message, kwargs=user_chat_ids,
                       trigger='cron', day_of_week='mon-fri', hour=20, minute=40, second=10)
-    scheduler.add_job(send_message, kwargs=kwargs,
+    scheduler.add_job(send_message, kwargs=user_chat_ids,
                       trigger='cron', day_of_week='mon-fri', hour=20, minute=43, second=20)
-    scheduler.add_job(send_message, kwargs=kwargs,
+    scheduler.add_job(send_message, kwargs=user_chat_ids,
                       trigger='cron', day_of_week='mon-fri', hour=20, minute=45, second=42)
     scheduler.start()
 
 
-async def on_startup(dp) -> None:
+async def on_startup(dispatcher) -> None:
     await bot.set_webhook(WEBHOOK_URL)
     asyncio_schedule()
 
 
-async def on_shutdown(dp):
+async def on_shutdown(dispatcher):
     logger.warning('Shutting down..')
 
     # Remove webhook (not acceptable in some cases)
@@ -121,7 +130,7 @@ if __name__ == '__main__':
     driver = configure_firefox_driver()
 
     start_webhook(
-        dispatcher=dp,
+        dispatcher=dispatcher,
         webhook_path=WEBHOOK_PATH,
         on_startup=on_startup,
         on_shutdown=on_shutdown,
