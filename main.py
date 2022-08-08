@@ -4,6 +4,7 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
+from aiogram.types import Message
 from aiogram.utils.callback_data import CallbackData
 from aiogram.utils.executor import start_webhook
 
@@ -37,14 +38,14 @@ async def home_office(query: types.CallbackQuery, callback_data: dict[str, str])
     text = parse_site(driver=driver)
 
     # or reply INTO webhook
-    return await query.answer(text)
+    return await query.message.edit_text(text)
 
 
 @dp.callback_query_handler(stations_cb.filter(direction='office->home'))
-async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
+async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> Message:
 
     # or reply INTO webhook
-    return await query.answer('Hello World')
+    return await query.message.edit_text('Hello World')
 
 
 @dp.message_handler(commands=['chatid'])
