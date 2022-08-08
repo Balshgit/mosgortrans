@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 
 echo "shutting down the bot"
