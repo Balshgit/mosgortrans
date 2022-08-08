@@ -13,9 +13,7 @@ dp.middleware.setup(LoggingMiddleware())
 
 
 @dp.message_handler(commands=['chatid'])
-async def echo(message: types.Message):
-    # Regular request
-    # await bot.send_message(message.chat.id, message.text)
+async def chat_id(message: types.Message):
 
     # or reply INTO webhook
     return SendMessage(message.chat.id, message.chat.id)
