@@ -72,8 +72,12 @@ async def echo(message: types.Message) -> None:
 
 
 async def send_message(chat_ids: list[int]) -> None:
-    text = parse_site(driver=driver)
-
+    text = parse_site(
+        driver=driver,
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+            '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+        message='Остановка Б. Академическая ул, д. 15'
+    )
     await asyncio.gather(
         *[bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML) for chat_id in chat_ids]
     )
