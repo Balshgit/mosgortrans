@@ -43,11 +43,15 @@ async def send_message(chat_ids: list[int]):
 def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+    kwargs = {'chat_ids': [417070387, ]}
+
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]},
-                      trigger='cron', day_of_week='mon-fri', hour=19, minute=23, second=10)
-    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]},
-                      trigger='cron', day_of_week='mon-fri', hour=19, minute=23, second=42)
+    scheduler.add_job(send_message, kwargs=kwargs,
+                      trigger='cron', day_of_week='mon-fri', hour=19, minute=32, second=10)
+    scheduler.add_job(send_message, kwargs=kwargs,
+                      trigger='cron', day_of_week='mon-fri', hour=19, minute=37, second=20)
+    scheduler.add_job(send_message, kwargs=kwargs,
+                      trigger='cron', day_of_week='mon-fri', hour=19, minute=42, second=42)
     scheduler.start()
 
 
