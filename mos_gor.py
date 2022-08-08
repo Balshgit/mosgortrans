@@ -47,10 +47,8 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     return firefox_driver
 
 
-def parse_site(driver: WebDriver) -> str:
-    driver.get(
-        'https://yandex.ru/maps/213/moscow/stops/stop__9640740/?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
-    )
+def parse_site(driver: WebDriver, url: str, message: str) -> str:
+    driver.get(url)
     time.sleep(4)
     elements = driver.find_elements(by='class name', value='masstransit-vehicle-snippet-view')
 
@@ -68,6 +66,6 @@ def parse_site(driver: WebDriver) -> str:
             bus_t19_arrival = element.find_element(by='class name', value='masstransit-prognoses-view__title-text')
         except NoSuchElementException:
             pass
-    return ('Остановка Б. Академическая ул, д. 15 в сторону Москва Сити\n\n'
+    return (f'{message}\n\n'
             f'Автобус {bus_300.text} - {bus_300_arrival.text}\nАвтобус {bus_t19.text} - {bus_t19_arrival.text}'
             )

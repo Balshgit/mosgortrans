@@ -35,7 +35,12 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
 @dp.callback_query_handler(stations_cb.filter(direction='home->office'))
 async def home_office(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
 
-    text = parse_site(driver=driver)
+    text = parse_site(
+        driver=driver,
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+            '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+        message='Остановка Б. Академическая ул, д. 15'
+    )
 
     # or reply INTO webhook
     return await query.message.edit_text(text)
@@ -45,7 +50,13 @@ async def home_office(query: types.CallbackQuery, callback_data: dict[str, str])
 async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> Message:
 
     # or reply INTO webhook
-    return await query.message.edit_text('Hello World')
+    text = parse_site(
+        driver=driver,
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640289/?'
+            'l=masstransit&ll=37.507947%2C55.802094&tab=timetable&z=21',
+        message='Остановка Улица Алабяна'
+    )
+    return await query.message.edit_text(text)
 
 
 @dp.message_handler(commands=['chatid'])
