@@ -72,5 +72,5 @@ def parse_site(driver: WebDriver, url: str, message: str) -> str:
     if bus_300:
         answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
     if bus_t19:
-        answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\nАвтобус {bus_t19.text} - {bus_t19_arrival.text}'
+        answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
     return answer

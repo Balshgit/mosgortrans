@@ -52,8 +52,8 @@ async def office_home(query: types.CallbackQuery, callback_data: dict[str, str])
     # or reply INTO webhook
     text = parse_site(
         driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640289/?'
-            'l=masstransit&ll=37.507947%2C55.802094&tab=timetable&z=21',
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
+            'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
         message='Остановка Улица Алабяна'
     )
     return await query.message.edit_text(text)
