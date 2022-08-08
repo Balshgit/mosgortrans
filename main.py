@@ -15,14 +15,14 @@ dp.middleware.setup(LoggingMiddleware())
 
 
 @dp.message_handler(commands=['chatid'])
-async def chat_id(message: types.Message):
+async def chat_id(message: types.Message) -> SendMessage:
 
     # or reply INTO webhook
     return SendMessage(message.chat.id, message.chat.id)
 
 
 @dp.message_handler()
-async def echo(message: types.Message):
+async def echo(message: types.Message) -> SendMessage:
     # Regular request
     # await bot.send_message(message.chat.id, message.text)
 
@@ -40,28 +40,21 @@ async def send_message(chat_ids: list[int]):
     )
 
 
-def asyncio_schedule():
-    """
-    python version >= 3.4.0
-    :return:
-    """
+def asyncio_schedule() -> None:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]}, trigger='interval', seconds=30)
+    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]}, trigger='cron', hour=19, minute=11, second=42)
     scheduler.start()
 
 
 async def on_startup(dp) -> None:
     await bot.set_webhook(WEBHOOK_URL)
-    asyncio_schedule()
-    # insert code here to run it after start
+    # asyncio_schedule()
 
 
 async def on_shutdown(dp):
     logger.warning('Shutting down..')
-
-    # insert code here to run it before shutdown
 
     # Remove webhook (not acceptable in some cases)
     await bot.delete_webhook()
