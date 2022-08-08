@@ -33,8 +33,12 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, text)
 
 
-async def send_message(chat_id: int = 417070387, text: str = 'Hello World'):
-    await bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML)
+async def send_message(chat_ids: list[int]):
+    text = parse_site(driver=driver)
+
+    await asyncio.gather(
+        *[bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML) for chat_id in chat_ids]
+    )
 
 
 def asyncio_schedule():
@@ -45,7 +49,7 @@ def asyncio_schedule():
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_message, 'interval', seconds=3)
+    scheduler.add_job(send_message, chat_ids=[417070387, ], trigger='interval', seconds=30)
     scheduler.start()
 
 
