@@ -43,7 +43,7 @@ async def home_office(query: types.CallbackQuery, callback_data: dict[str, str])
     )
 
     # or reply INTO webhook
-    return await query.message.edit_text(text)
+    return await query.message.edit_text(text, reply_markup=get_keyboard())
 
 
 @dp.callback_query_handler(stations_cb.filter(direction='office->home'))
@@ -56,7 +56,7 @@ async def office_home(query: types.CallbackQuery, callback_data: dict[str, str])
             'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
         message='Остановка Улица Алабяна'
     )
-    return await query.message.edit_text(text)
+    return await query.message.edit_text(text, reply_markup=get_keyboard())
 
 
 @dp.message_handler(commands=['chatid'])
