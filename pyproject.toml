@@ -12,6 +12,7 @@ httpx = "^0.23.0"
 wget = "^3.2"
 loguru = "^0.6.0"
 python-decouple = "^3.6"
+apscheduler = "^3.9.1"
 
 [tool.poetry.dev-dependencies]
 

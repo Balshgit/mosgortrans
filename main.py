@@ -18,8 +18,8 @@ dp.middleware.setup(LoggingMiddleware())
 async def chat_id(message: types.Message):
 
     # or reply INTO webhook
-    SendMessage(message.chat.id, message.chat.id)
-    await send_message(message.chat.id, 'Hello World')
+    asyncio_schedule()
+    return SendMessage(message.chat.id, message.chat.id)
 
 
 @dp.message_handler()
@@ -33,12 +33,29 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, text)
 
 
-async def send_message(chat_id: int, text: str):
-    await asyncio.sleep(15)
+async def send_message(chat_id: int = 417070387, text: str = 'Hello World'):
     await bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML)
 
 
-async def on_startup(dp):
+def asyncio_schedule():
+    """
+    python version >= 3.4.0
+    :return:
+    """
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(send_message, 'interval', seconds=3)
+    scheduler.start()
+
+    # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
+    try:
+        asyncio.get_event_loop().run_forever()
+    except (KeyboardInterrupt, SystemExit):
+        pass
+
+
+async def on_startup(dp) -> None:
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
