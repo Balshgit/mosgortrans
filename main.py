@@ -45,14 +45,14 @@ async def on_shutdown(dp):
     logger.warning('Bye!')
 
 
-# async def async_app():
-#     app = make_app()
-#     executor = Executor(dp, skip_updates=True)
-#     executor.on_startup(on_startup)
-#     executor.on_shutdown(on_shutdown)
-#     executor._prepare_webhook(config.WEBHOOK_PATH, app=app)
-#     await executor._startup_webhook()
-#     return app
+async def async_app():
+    app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_PATH)
+    executor = Executor(dp, skip_updates=True)
+    executor.on_startup(on_startup)
+    executor.on_shutdown(on_shutdown)
+    executor._prepare_webhook(WEBHOOK_PATH, app=app)
+    await executor._startup_webhook()
+    return app
 
 
 if __name__ == '__main__':
@@ -60,13 +60,7 @@ if __name__ == '__main__':
     download_gecko_driver()
     driver = configure_firefox_driver()
 
-    app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_PATH)
-    # Setup event handlers.
-    app.on_startup.append(on_startup)
-    app.on_shutdown.append(on_shutdown)
-    app.skip_updates = True
-
-    uvicorn.run(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+    uvicorn.run(async_app(), host=WEBAPP_HOST, port=WEBAPP_PORT)
 
     # start_webhook(
     #     dispatcher=dp,
