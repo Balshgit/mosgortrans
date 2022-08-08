@@ -1,8 +1,8 @@
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage, get_new_configured_app
-from aiogram.utils.executor import start_webhook, Executor
+from aiogram.dispatcher.webhook import SendMessage
+from aiogram.utils.executor import start_webhook
 
 from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
 from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
@@ -10,6 +10,15 @@ from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_P
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
+
+
+@dp.message_handler(commands=['chatid'])
+async def echo(message: types.Message):
+    # Regular request
+    # await bot.send_message(message.chat.id, message.text)
+
+    # or reply INTO webhook
+    return SendMessage(message.chat.id, message.chat.id)
 
 
 @dp.message_handler()
@@ -21,6 +30,10 @@ async def echo(message: types.Message):
 
     # or reply INTO webhook
     return SendMessage(message.chat.id, text)
+
+
+async def send_message(chat_id: int, text: str):
+    await bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML)
 
 
 async def on_startup(dp):
@@ -41,16 +54,6 @@ async def on_shutdown(dp):
     await dp.storage.wait_closed()
 
     logger.warning('Bye!')
-
-
-async def async_app():
-    app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_PATH)
-    executor = Executor(dp, skip_updates=True)
-    executor.on_startup(on_startup)
-    executor.on_shutdown(on_shutdown)
-    executor._prepare_webhook(WEBHOOK_PATH, app=app)
-    await executor._startup_webhook()
-    return app
 
 
 if __name__ == '__main__':
