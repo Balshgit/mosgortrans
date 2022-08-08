@@ -1,11 +1,13 @@
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
-from aiogram.utils.executor import start_webhook
+from aiogram.dispatcher.webhook import SendMessage, get_new_configured_app
+from aiogram.utils.executor import start_webhook, Executor
 
 from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
 from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
+
+from aiohttp import web
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -43,15 +45,35 @@ async def on_shutdown(dp):
     logger.warning('Bye!')
 
 
+# async def async_app():
+#     app = make_app()
+#     executor = Executor(dp, skip_updates=True)
+#     executor.on_startup(on_startup)
+#     executor.on_shutdown(on_shutdown)
+#     executor._prepare_webhook(config.WEBHOOK_PATH, app=app)
+#     await executor._startup_webhook()
+#     return app
+
+
 if __name__ == '__main__':
+    import uvicorn
     download_gecko_driver()
     driver = configure_firefox_driver()
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        on_startup=on_startup,
-        on_shutdown=on_shutdown,
-        skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-    )
+
+    app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_PATH)
+    # Setup event handlers.
+    app.on_startup.append(on_startup)
+    app.on_shutdown.append(on_shutdown)
+    app.skip_updates = True
+
+    uvicorn.run(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+
+    # start_webhook(
+    #     dispatcher=dp,
+    #     webhook_path=WEBHOOK_PATH,
+    #     on_startup=on_startup,
+    #     on_shutdown=on_shutdown,
+    #     skip_updates=True,
+    #     host=WEBAPP_HOST,
+    #     port=WEBAPP_PORT,
+    # )
