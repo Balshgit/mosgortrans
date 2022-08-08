@@ -2,6 +2,10 @@
 
 ## Install & Update
 
+install service
+
+    sudo cp scripts/mosgortrans.service /etc/systemd/system
+
 ```bash
 cd ~/PycharmProjects/mosgortrans
 sudo systemctl stop mosgortrans.service
