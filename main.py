@@ -7,8 +7,6 @@ from aiogram.utils.executor import start_webhook, Executor
 from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
 from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
-from aiohttp import web
-
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
@@ -56,18 +54,15 @@ async def async_app():
 
 
 if __name__ == '__main__':
-    import uvicorn
     download_gecko_driver()
     driver = configure_firefox_driver()
 
-    uvicorn.run(async_app(), host=WEBAPP_HOST, port=WEBAPP_PORT)
-
-    # start_webhook(
-    #     dispatcher=dp,
-    #     webhook_path=WEBHOOK_PATH,
-    #     on_startup=on_startup,
-    #     on_shutdown=on_shutdown,
-    #     skip_updates=True,
-    #     host=WEBAPP_HOST,
-    #     port=WEBAPP_PORT,
-    # )
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        on_startup=on_startup,
+        on_shutdown=on_shutdown,
+        skip_updates=True,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )
