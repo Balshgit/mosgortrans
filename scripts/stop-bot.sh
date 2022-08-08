@@ -2,5 +2,5 @@
 
 
 echo "shutting down the bot"
-bash killall python;
-bash killall firefox;
+killall python;
+killall firefox;

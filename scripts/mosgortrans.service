@@ -2,11 +2,10 @@
 Description=MosGorTrans bot
 Wants=network-online.target
 After=network-online.target
-
 [Service]
 Restart=always
 WorkingDirectory=/opt/mosgortrans
-ExecStart=scripts/start-bot.sh
-ExecStop=scripts/shutdown-bot.sh
+ExecStart=/bin/bash /opt/mosgortrans/scripts/start-bot.sh
+ExecStop=/bin/bash /opt/mosgortrans/scripts/stop-bot.sh
 [Install]
 WantedBy=multi-user.target
