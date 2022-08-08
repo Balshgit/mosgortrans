@@ -12,22 +12,22 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler(commands=['chatid'])
+@dp.message_handler(commands=['/chatid'])
 async def chat_id(message: types.Message):
 
     # or reply INTO webhook
     return SendMessage(message.chat.id, message.chat.id)
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    # Regular request
-    # await bot.send_message(message.chat.id, message.text)
-
-    text = parse_site(driver=driver)
-
-    # or reply INTO webhook
-    return SendMessage(message.chat.id, text)
+# @dp.message_handler()
+# async def echo(message: types.Message):
+#     # Regular request
+#     # await bot.send_message(message.chat.id, message.text)
+#
+#     text = parse_site(driver=driver)
+#
+#     # or reply INTO webhook
+#     return SendMessage(message.chat.id, text)
 
 
 async def send_message(chat_id: int, text: str):
