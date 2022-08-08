@@ -25,4 +25,4 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
 WEBAPP_HOST = config('WEBAPP_HOST')  # or ip
-WEBAPP_PORT = config('WEBAPP_PORT')
+WEBAPP_PORT = config('WEBAPP_PORT', cast=int)
