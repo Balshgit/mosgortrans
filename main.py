@@ -48,10 +48,10 @@ if __name__ == '__main__':
     driver = configure_firefox_driver()
     start_webhook(
         dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
+        webhook_path='/transport',  # WEBHOOK_PATH,
         on_startup=on_startup,
         on_shutdown=on_shutdown,
         skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
+        host='test-server.lan',  #  WEBAPP_HOST,
+        port=8084,  # WEBAPP_PORT,
     )
