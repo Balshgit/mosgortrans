@@ -45,7 +45,9 @@ def asyncio_schedule() -> None:
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]},
-                      trigger='cron', day_of_week='1,2,3,4,5', hour=19, minute=19, second=10)
+                      trigger='cron', day_of_week='mon-fri', hour=19, minute=23, second=10)
+    scheduler.add_job(send_message, kwargs={'chat_ids': [417070387, ]},
+                      trigger='cron', day_of_week='mon-fri', hour=19, minute=23, second=42)
     scheduler.start()
 
 
