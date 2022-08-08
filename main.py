@@ -48,12 +48,6 @@ def asyncio_schedule():
     scheduler.add_job(send_message, 'interval', seconds=3)
     scheduler.start()
 
-    # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
-    try:
-        asyncio.get_event_loop().run_forever()
-    except (KeyboardInterrupt, SystemExit):
-        pass
-
 
 async def on_startup(dp) -> None:
     await bot.set_webhook(WEBHOOK_URL)
