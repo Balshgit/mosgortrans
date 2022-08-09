@@ -1,24 +1,17 @@
 import os
-import sys
 import tarfile
 import time
-from datetime import datetime
 from pathlib import Path
 
 import wget
-from loguru import logger
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
 
+from core.logger import logger
 from settings import BASE_DIR, GECKO_DRIVER_VERSION
-
-logger.remove()
-logger.add(sink=sys.stdout, colorize=True, level='DEBUG',
-           format="<cyan>{time:DD.MM.YYYY HH:mm:ss}</cyan> | <level>{level}</level> | "
-                  "<magenta>{message}</magenta>")
 
 
 def download_gecko_driver():

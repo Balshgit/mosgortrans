@@ -5,25 +5,15 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
-from aiogram.utils.executor import start_webhook
 
-from mos_gor import logger, parse_site, download_gecko_driver, configure_firefox_driver
-from settings import API_TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
+from core.parse_web import parse_site, configure_firefox_driver
+from settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
-cron_jobs = [
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 8, 'minute': 59, 'second': 0},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 9, 'minute': 4, 'second': 0},
-        {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 9, 'minute': 9, 'second': 0},
-    ]
-
-user_chat_ids = {'chat_ids': [417070387,  # me
-                              431571617,  # Lenok
-                              ]}
-
+driver = configure_firefox_driver()
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -73,8 +63,8 @@ async def chat_id(message: types.Message) -> SendMessage:
 
 
 @dispatcher.message_handler()
-async def echo(message: types.Message) -> None:
-    await message.reply('Выбери остановку', reply_markup=get_keyboard())
+async def echo(message: types.Message) -> SendMessage:
+    return SendMessage(message.chat.id, 'Выбери остановку', reply_markup=get_keyboard())
 
 
 async def send_message(chat_ids: list[int]) -> None:
@@ -86,46 +76,4 @@ async def send_message(chat_ids: list[int]) -> None:
     )
     await asyncio.gather(
         *[bot.send_message(chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML) for chat_id in chat_ids]
-    )
-
-
-def asyncio_schedule() -> None:
-    from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-    scheduler = AsyncIOScheduler()
-    for cron in cron_jobs:
-        scheduler.add_job(send_message, kwargs=user_chat_ids, **cron)
-    scheduler.start()
-
-
-async def on_startup(dispatcher) -> None:
-    await bot.set_webhook(WEBHOOK_URL)
-    asyncio_schedule()
-
-
-async def on_shutdown(dispatcher):
-    logger.warning('Shutting down..')
-
-    # Remove webhook (not acceptable in some cases)
-    await bot.delete_webhook()
-
-    # Close DB connection (if used)
-    await dispatcher.storage.close()
-    await dispatcher.storage.wait_closed()
-
-    logger.warning('Bye!')
-
-
-if __name__ == '__main__':
-    download_gecko_driver()
-    driver = configure_firefox_driver()
-
-    start_webhook(
-        dispatcher=dispatcher,
-        webhook_path=WEBHOOK_PATH,
-        on_startup=on_startup,
-        on_shutdown=on_shutdown,
-        skip_updates=True,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
     )
