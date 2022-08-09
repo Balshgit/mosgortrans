@@ -4,7 +4,6 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
-from aiogram.types import Message
 from aiogram.utils.callback_data import CallbackData
 from aiogram.utils.executor import start_webhook
 
@@ -43,7 +42,7 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
 
 
 @dispatcher.callback_query_handler(stations_cb.filter(direction='home->office'))
-async def home_office(query: types.CallbackQuery, callback_data: dict[str, str]) -> None:
+async def home_office(query: types.CallbackQuery, callback_data: dict[str, str]) -> SendMessage:
 
     text = parse_site(
         driver=driver,
@@ -52,27 +51,24 @@ async def home_office(query: types.CallbackQuery, callback_data: dict[str, str])
         message='Остановка Б. Академическая ул, д. 15'
     )
 
-    # or reply INTO webhook
-    return await query.message.edit_text(text, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 
 
 @dispatcher.callback_query_handler(stations_cb.filter(direction='office->home'))
-async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> Message:
+async def office_home(query: types.CallbackQuery, callback_data: dict[str, str]) -> SendMessage:
 
-    # or reply INTO webhook
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
             'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
         message='Остановка Улица Алабяна'
     )
-    return await query.message.edit_text(text, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> SendMessage:
 
-    # or reply INTO webhook
     return SendMessage(message.chat.id, message.chat.id)
 
 
