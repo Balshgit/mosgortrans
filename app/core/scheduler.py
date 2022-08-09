@@ -1,4 +1,4 @@
-from core.bot import send_message
+from core.bot import morning_bus_mailing
 
 cron_jobs = [
         {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 8, 'minute': 59, 'second': 0},
@@ -16,5 +16,5 @@ def asyncio_schedule() -> None:
 
     scheduler = AsyncIOScheduler()
     for cron in cron_jobs:
-        scheduler.add_job(send_message, kwargs=user_chat_ids, **cron)
+        scheduler.add_job(morning_bus_mailing, kwargs=user_chat_ids, **cron)
     scheduler.start()

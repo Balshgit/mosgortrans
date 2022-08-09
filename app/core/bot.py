@@ -68,7 +68,7 @@ async def echo(message: types.Message) -> SendMessage:
     return SendMessage(message.chat.id, 'Выбери остановку', reply_markup=get_keyboard())
 
 
-async def send_message(chat_ids: list[int]) -> None:
+async def morning_bus_mailing(chat_ids: list[int]) -> None:
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
