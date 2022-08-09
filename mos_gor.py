@@ -2,6 +2,7 @@ import os
 import sys
 import tarfile
 import time
+from datetime import datetime
 from pathlib import Path
 
 import wget
@@ -66,7 +67,7 @@ def parse_site(driver: WebDriver, url: str, message: str) -> str:
             bus_t19_arrival = element.find_element(by='class name', value='masstransit-prognoses-view__title-text')
         except NoSuchElementException:
             pass
-    answer = f'{message}\n\n'
+    answer = f'{datetime.now().strftime("%X")} {message}\n\n'
     if not all([bus_300, bus_t19]):
         return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
     if bus_300:
