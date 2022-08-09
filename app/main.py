@@ -2,7 +2,6 @@ from aiogram.utils.executor import start_webhook
 
 from core.bot import bot, dispatcher
 from core.logger import logger
-from core.parse_web import download_gecko_driver
 from core.scheduler import asyncio_schedule
 from settings import WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
@@ -26,7 +25,6 @@ async def on_shutdown(dispatcher):
 
 
 if __name__ == '__main__':
-    download_gecko_driver()
 
     start_webhook(
         dispatcher=dispatcher,

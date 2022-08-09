@@ -6,13 +6,14 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
 
-from core.parse_web import parse_site, configure_firefox_driver
+from core.parse_web import parse_site, configure_firefox_driver, download_gecko_driver
 from settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
+download_gecko_driver()
 driver = configure_firefox_driver()
 
 stations_cb = CallbackData('station', 'direction')
