@@ -1,3 +1,4 @@
+import asyncio
 import os
 import tarfile
 import time
@@ -44,7 +45,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     return firefox_driver
 
 
-def parse_site(driver: WebDriver, url: str, message: str) -> str:
+async def parse_site(driver: WebDriver, url: str, message: str) -> str:
     driver.get(url)
     time.sleep(4)
     elements = driver.find_elements(
@@ -80,4 +81,5 @@ def parse_site(driver: WebDriver, url: str, message: str) -> str:
         answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
     if bus_t19 and bus_t19_arrival:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
+    await asyncio.sleep(30)
     return answer

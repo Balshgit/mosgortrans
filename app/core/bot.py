@@ -17,7 +17,6 @@ download_gecko_driver()
 driver = configure_firefox_driver()
 
 executor = ThreadPoolExecutor(5)
-loop = asyncio.get_running_loop()
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -50,6 +49,7 @@ async def home_office(
     )
     message = 'Остановка Б. Академическая ул, д. 15'
 
+    loop = asyncio.get_running_loop()
     text = await loop.run_in_executor(executor, parse_site, driver, url, message)
 
     # text = parse_site(
