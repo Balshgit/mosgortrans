@@ -24,6 +24,7 @@ tomlkit = "^0.7.2"
 bandit = "1.7.4"
 requests = "^2.26.0"
 SQLAlchemy = {version = "^1.4", extras = ["mypy"]}
+aresponses = "^2.1"
 
 pyupgrade = "^2.24.0"
 isort = "^5.9.3"
@@ -33,7 +34,7 @@ mypy = "^0.961"
 types-PyMySQL = "^1.0.11"
 types-python-dateutil = "^2.8.4"
 
-pytest = "^6.0"
+pytest = "^6.2.4"
 pytest-asyncio = "^0.15.1"
 pytest-deadfixtures = "^2.2.1"
 pytest-testmon = "^1.1.2"
@@ -68,6 +69,7 @@ multi_line_output = 3
 src_paths = ["LenokWinServer",]
 
 [tool.mypy]
+python_version = "3.10"
 strict = true
 ignore_missing_imports = true
 allow_subclassing_any = true
@@ -79,6 +81,7 @@ allow_untyped_decorators = true
 warn_return_any = false
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
+
 [tool.coverage.run]
 relative_files = true
 
@@ -87,3 +90,6 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
 ]
+
+[tool.black]
+skip-string-normalization = true
