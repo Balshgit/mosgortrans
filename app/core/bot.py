@@ -67,12 +67,21 @@ async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> SendMessage:
 
-    text = parse_site(
-        driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
-        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
-        message='Остановка Улица Алабяна',
+    url = (
+        'https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
+        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211'
     )
+    message = 'Остановка Улица Алабяна'
+
+    loop = asyncio.get_running_loop()
+    text = await loop.run_in_executor(executor, parse_site, driver, url, message)
+
+    # text = parse_site(
+    #     driver=driver,
+    #     url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
+    #     'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
+    #     message='Остановка Улица Алабяна',
+    # )
     return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 
 
