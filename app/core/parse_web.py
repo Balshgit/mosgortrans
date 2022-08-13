@@ -15,8 +15,10 @@ from settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 
 def download_gecko_driver():
-    gecko_driver = f'https://github.com/mozilla/geckodriver/releases/download/v{GECKO_DRIVER_VERSION}/' \
-                   f'geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
+    gecko_driver = (
+        f'https://github.com/mozilla/geckodriver/releases/download/v{GECKO_DRIVER_VERSION}/'
+        f'geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
+    )
 
     if not Path(f'{BASE_DIR}/geckodriver').exists():
         logger.info(f'Downloading gecodriver v {GECKO_DRIVER_VERSION}...')
@@ -44,20 +46,30 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
 def parse_site(driver: WebDriver, url: str, message: str) -> str:
     driver.get(url)
     time.sleep(4)
-    elements = driver.find_elements(by='class name', value='masstransit-vehicle-snippet-view')
+    elements = driver.find_elements(
+        by='class name', value='masstransit-vehicle-snippet-view'
+    )
 
     bus_300, bus_t19 = None, None
     bus_300_arrival, bus_t19_arrival = None, None
 
     for element in elements:
         try:
-            bus_300 = element.find_element(by='css selector', value='[aria-label="300"]')
-            bus_300_arrival = element.find_element(by='class name', value='masstransit-prognoses-view__title-text')
+            bus_300 = element.find_element(
+                by='css selector', value='[aria-label="300"]'
+            )
+            bus_300_arrival = element.find_element(
+                by='class name', value='masstransit-prognoses-view__title-text'
+            )
         except NoSuchElementException:
             pass
         try:
-            bus_t19 = element.find_element(by='css selector', value='[aria-label="т19"]')
-            bus_t19_arrival = element.find_element(by='class name', value='masstransit-prognoses-view__title-text')
+            bus_t19 = element.find_element(
+                by='css selector', value='[aria-label="т19"]'
+            )
+            bus_t19_arrival = element.find_element(
+                by='class name', value='masstransit-prognoses-view__title-text'
+            )
         except NoSuchElementException:
             pass
     answer = f'{message}\n\n'
