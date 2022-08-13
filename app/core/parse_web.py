@@ -4,14 +4,13 @@ import time
 from pathlib import Path
 
 import wget
+from app.core.logger import logger
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
-
-from core.logger import logger
-from settings import BASE_DIR, GECKO_DRIVER_VERSION
+from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 
 def download_gecko_driver():
@@ -20,13 +19,13 @@ def download_gecko_driver():
         f'geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
     )
 
-    if not Path(f'{BASE_DIR}/geckodriver').exists():
+    if not Path(BASE_DIR / 'geckodriver').exists():
         logger.info(f'Downloading gecodriver v {GECKO_DRIVER_VERSION}...')
-        geckodriver_file = wget.download(url=gecko_driver, out=BASE_DIR)
+        geckodriver_file = wget.download(url=gecko_driver, out=BASE_DIR.resolve().as_posix())
 
         with tarfile.open(geckodriver_file) as tar:
             tar.extractall(BASE_DIR)
-        os.remove(f'{BASE_DIR}/geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz')
+        os.remove(f'{BASE_DIR / "geckodriver"}-v{GECKO_DRIVER_VERSION}-linux64.tar.gz')
         logger.info(f'\ngeckodriver has been downloaded to folder {BASE_DIR}')
 
 
@@ -37,7 +36,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     opt.add_argument(f'{Path.home()}/snap/firefox/common/.mozilla/firefox')
     if private_window:
         opt.set_preference("browser.privatebrowsing.autostart", True)
-    service = Service(executable_path=f'{BASE_DIR}/geckodriver')
+    service = Service(executable_path=BASE_DIR / 'geckodriver')
     firefox_driver = webdriver.Firefox(service=service, options=opt)
 
     return firefox_driver
@@ -80,3 +79,5 @@ def parse_site(driver: WebDriver, url: str, message: str) -> str:
     if bus_t19:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
     return answer
+
+download_gecko_driver()

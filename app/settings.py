@@ -14,7 +14,6 @@ config = AutoConfig(search_path=env_path)
 
 
 GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION')
-BASE_DIR = Path(__file__).parent.resolve().as_posix()
 
 API_TOKEN = config('API_TOKEN')
 
