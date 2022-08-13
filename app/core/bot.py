@@ -6,7 +6,6 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
-
 from core.parse_web import configure_firefox_driver, download_gecko_driver, parse_site
 from settings import API_TOKEN
 
@@ -44,9 +43,10 @@ async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> SendMessage:
 
-    url = ('https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-           '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
-           )
+    url = (
+        'https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
+    )
     message = 'Остановка Б. Академическая ул, д. 15'
 
     loop = asyncio.get_running_loop()

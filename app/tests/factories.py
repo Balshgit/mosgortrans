@@ -1,6 +1,5 @@
 import factory
 from faker import Faker
-
 from tests.models import User
 
 faker = Faker('ru_RU')

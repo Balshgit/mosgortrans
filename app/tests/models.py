@@ -1,7 +1,7 @@
 """"
 Dict data set for Telegram message types
 """
-from typing import NamedTuple, Any
+from typing import Any, NamedTuple
 
 
 class User(NamedTuple):
