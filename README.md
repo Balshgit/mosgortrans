@@ -10,7 +10,7 @@ install service
 cd ~/PycharmProjects/mosgortrans
 sudo systemctl stop mosgortrans.service
 git pull balshgit master
-sudo cp ~/Pycharmprojects/mosgortrans/* /opt/mosgortrans/ -r
+sudo rsync -a --progress ~/mosgortrans/* /opt/mosgortrans/ --exclude .git
 sudo systemctl start mosgortrans.service
 ```
 

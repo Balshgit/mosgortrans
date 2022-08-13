@@ -36,7 +36,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     opt.add_argument(f'{Path.home()}/snap/firefox/common/.mozilla/firefox')
     if private_window:
         opt.set_preference("browser.privatebrowsing.autostart", True)
-    service = Service(executable_path=BASE_DIR / 'geckodriver')
+    service = Service(executable_path=str(BASE_DIR / 'geckodriver'))
     firefox_driver = webdriver.Firefox(service=service, options=opt)
 
     return firefox_driver
