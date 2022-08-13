@@ -44,7 +44,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     return firefox_driver
 
 
-async def parse_site(driver: WebDriver, url: str, message: str) -> str:
+def parse_site(driver: WebDriver, url: str, message: str) -> str:
     driver.get(url)
     time.sleep(4)
     elements = driver.find_elements(

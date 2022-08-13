@@ -1,10 +1,12 @@
 import asyncio
+from concurrent.futures.thread import ThreadPoolExecutor
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
+
 from core.parse_web import configure_firefox_driver, download_gecko_driver, parse_site
 from settings import API_TOKEN
 
@@ -14,6 +16,8 @@ dispatcher.middleware.setup(LoggingMiddleware())
 
 download_gecko_driver()
 driver = configure_firefox_driver()
+
+executor = ThreadPoolExecutor(5)
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -40,12 +44,20 @@ async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> SendMessage:
 
-    text = parse_site(
-        driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
-        message='Остановка Б. Академическая ул, д. 15',
-    )
+    url = ('https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+           '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
+           )
+    message = 'Остановка Б. Академическая ул, д. 15'
+
+    loop = asyncio.get_running_loop()
+    text = await loop.run_in_executor(executor, parse_site, driver, url, message)
+
+    # text = parse_site(
+    #     driver=driver,
+    #     url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+    #     '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+    #     message='Остановка Б. Академическая ул, д. 15',
+    # )
 
     return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 

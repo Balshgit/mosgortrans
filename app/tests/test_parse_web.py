@@ -1,7 +1,7 @@
 import pytest
 from aiogram import Bot, types
 from app.tests.conftest import FakeTelegram
-from app.tests.dataset import USER
+from tests.factories import UserFactory
 
 pytestmark = [
     pytest.mark.asyncio,
@@ -9,9 +9,10 @@ pytestmark = [
 
 
 async def test_parse_site(bot: Bot) -> None:
-    user = types.User(**USER)
+    tg_user = UserFactory().as_dict()
+    user = types.User(**tg_user)
 
-    async with FakeTelegram(message_data=USER):
+    async with FakeTelegram(message_data=tg_user):
         result = await bot.me
 
     assert result == user
