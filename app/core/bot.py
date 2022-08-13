@@ -5,8 +5,8 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
-from app.core.parse_web import configure_firefox_driver, download_gecko_driver, parse_site
-from app.settings import API_TOKEN
+from core.parse_web import configure_firefox_driver, download_gecko_driver, parse_site
+from settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
