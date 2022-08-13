@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mosgortrans"
-version = "0.1.0"
+version = "0.7.1"
 description = "Bot to help with mosgortans"
 authors = ["Dmitry Afanasyev <Balshbox@gmail.com>"]
 
@@ -13,9 +13,77 @@ wget = "^3.2"
 loguru = "^0.6.0"
 python-decouple = "^3.6"
 apscheduler = "^3.9.1"
+SQLAlchemy = {version = "^1.4", extras = ["mypy", "asyncio"]}
 
 [tool.poetry.dev-dependencies]
+ipython = "^8.2.0"
+pre-commit = "^2.14.0"
+safety = "^1.10.3"
+yamllint = "^1.26.3"
+tomlkit = "^0.7.2"
+bandit = "1.7.4"
+requests = "^2.26.0"
+SQLAlchemy = {version = "^1.4", extras = ["mypy"]}
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+pyupgrade = "^2.24.0"
+isort = "^5.9.3"
+black = "^22.3.0"
+
+mypy = "^0.961"
+types-PyMySQL = "^1.0.11"
+types-python-dateutil = "^2.8.4"
+
+pytest = "^6.0"
+pytest-asyncio = "^0.15.1"
+pytest-deadfixtures = "^2.2.1"
+pytest-testmon = "^1.1.2"
+pytest-mock = "^3.6.1"
+pytest-cov = "^2.12.1"
+pytest-timeout = "^1.4.2"
+pytest-sugar = "^0.9.4"
+pytest-clarity = "^1.0.1"
+pytest-env = "^0.6.2"
+nest-asyncio = "^1.5.1"
+
+autoflake = "^1.4"
+flake8 = "^3.9"
+flake8-logging-format = "^0.6.0"
+flake8-comprehensions = "^3.6.1"
+flake8-eradicate = "^1.1.0"
+flake8-pytest-style = "^1.5.0"
+flake8-aaa = "^0.12.0"
+flake8-bugbear = "^21.4.3"
+flake8-debugger = "^4.0.0"
+flake8-expression-complexity = "^0.0.11"
+flake8-fixme = "^1.1.1"
+flake8-simplify = "^0.18.2"
+flake8-variables-names = "^0.0.4"
+flake8-bandit = "3.0.0"
+flake8-tidy-imports = "^4.4.1"
+
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+src_paths = ["LenokWinServer",]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+allow_subclassing_any = true
+allow_untyped_calls = true
+pretty = true
+show_error_codes = true
+implicit_reexport = true
+allow_untyped_decorators = true
+warn_return_any = false
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+]
