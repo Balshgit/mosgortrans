@@ -20,7 +20,7 @@ pre-push:
       run: isort --check-only {all_files}
     black:
       glob: "*.py"
-      run: black --check {all_files}
+      run: black --check -S {all_files}
     mypy:
       glob: "*.py"
       run: mypy {all_files} --namespace-packages
@@ -41,10 +41,10 @@ format:
       run: isort --color --quiet {staged_files}
     3_black:
       glob: "*.py"
-      run: black {staged_files}
+      run: black -S {staged_files}
     4_black_check:
       glob: "*.py"
-      run: black --check {staged_files}
+      run: black --check -S {staged_files}
 
 lint:
   parallel: true
@@ -64,4 +64,4 @@ check-format:
       run: isort --check-only {staged_files}
     black:
       glob: "*.py"
-      run: black --check {staged_files}
+      run: black --check -S {staged_files}

@@ -21,7 +21,9 @@ def download_gecko_driver() -> None:
 
     if not Path(BASE_DIR / 'geckodriver').exists():
         logger.info(f'Downloading gecodriver v {GECKO_DRIVER_VERSION}...')
-        geckodriver_file = wget.download(url=gecko_driver, out=BASE_DIR.resolve().as_posix())
+        geckodriver_file = wget.download(
+            url=gecko_driver, out=BASE_DIR.resolve().as_posix()
+        )
 
         with tarfile.open(geckodriver_file) as tar:
             tar.extractall(BASE_DIR)
