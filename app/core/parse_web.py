@@ -13,7 +13,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 
-def download_gecko_driver():
+def download_gecko_driver() -> None:
     gecko_driver = (
         f'https://github.com/mozilla/geckodriver/releases/download/v{GECKO_DRIVER_VERSION}/'
         f'geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
@@ -72,10 +72,10 @@ def parse_site(driver: WebDriver, url: str, message: str) -> str:
         except NoSuchElementException:
             pass
     answer = f'{message}\n\n'
-    if not all([bus_300, bus_t19]):
+    if not all([bus_300, bus_t19]) or not all([bus_300_arrival, bus_t19_arrival]):
         return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
-    if bus_300:
+    if bus_300 and bus_300_arrival:
         answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
-    if bus_t19:
+    if bus_t19 and bus_t19_arrival:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
     return answer
