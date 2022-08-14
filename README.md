@@ -21,3 +21,7 @@ killall geckodriver
 killall firefox
 killall python
 ```
+
+## Help article
+
+[Пишем асинхронного Телеграм-бота](https://habr.com/ru/company/kts/blog/598575/)
