@@ -1,5 +1,4 @@
 import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -15,8 +14,6 @@ dispatcher.middleware.setup(LoggingMiddleware())
 
 download_gecko_driver()
 driver = configure_firefox_driver()
-
-executor = ThreadPoolExecutor(5)
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -43,23 +40,14 @@ async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> SendMessage:
 
-    url = (
-        'https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
+    text = parse_site(
+        driver=driver,
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+        message='Остановка Б. Академическая ул, д. 15',
     )
-    message = 'Остановка Б. Академическая ул, д. 15'
 
-    await asyncio.sleep(15)
-    await bot.send_message(417070387, 'World Hello')
-
-    # text = parse_site(
-    #     driver=driver,
-    #     url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-    #     '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
-    #     message='Остановка Б. Академическая ул, д. 15',
-    # )
-
-    return SendMessage(query.message.chat.id, message, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 
 
 @dispatcher.callback_query_handler(stations_cb.filter(direction='office->home'))
@@ -67,22 +55,13 @@ async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> SendMessage:
 
-    url = (
-        'https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
-        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211'
+    text = parse_site(
+        driver=driver,
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
+        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
+        message='Остановка Улица Алабяна',
     )
-    message = 'Остановка Улица Алабяна'
-
-    await asyncio.sleep(15)
-    await bot.send_message(417070387, 'Hello World')
-
-    # text = parse_site(
-    #     driver=driver,
-    #     url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
-    #     'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
-    #     message='Остановка Улица Алабяна',
-    # )
-    return SendMessage(query.message.chat.id, message, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
 
 
 @dispatcher.message_handler(commands=['chatid'])
