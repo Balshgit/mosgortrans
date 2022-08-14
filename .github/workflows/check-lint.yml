@@ -1,4 +1,4 @@
-name: test
+name: lint
 
 on:
   push:
@@ -60,16 +60,12 @@ jobs:
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
-      - name: Run tests
+      - name: Analysing the code with mypy
         run: |
-          source .venv/bin/activate
-          poetry run pytest -vv --exitfirst
-      - name: Coverage report
+          mypy .
+      - name: Analysing the code with flake8
         run: |
-          poetry run coverage run -m pytest
-          poetry run coverage report
-      - name: Extended checks
+          flake8
+      - name: Analysing code with isort
         run: |
-          poetry run poetry check
-          poetry run pip check
-          poetry run safety check --full-report
+          isort --check-only app

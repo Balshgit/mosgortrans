@@ -1,7 +1,9 @@
 import pytest
 from aiogram import Bot, types
+from aiogram.dispatcher.filters.builtin import Command
 from app.tests.conftest import FakeTelegram
 from app.tests.data.factories import UserFactory
+from core.bot import dispatcher
 
 pytestmark = [
     pytest.mark.asyncio,
@@ -16,3 +18,16 @@ async def test_parse_site(bot: Bot) -> None:
         result = await bot.me
 
     assert result == user
+
+
+async def test_command1(bot: Bot) -> None:
+
+    dispatcher.bot = bot
+    handlers = dispatcher.message_handlers.handlers
+    for handler in handlers:
+        handl = list(
+            filter(lambda obj: isinstance(obj.filter, Command), handler.filters)
+        )
+        if handl:
+            command = handl[0].filter.commands[0]
+            assert command

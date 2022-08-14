@@ -26,8 +26,8 @@ async def on_shutdown(dp: Dispatcher) -> None:
     # Close DB connection (if used)
     if driver:
         driver.close()
-    await dispatcher.storage.close()
-    await dispatcher.storage.wait_closed()
+    await dp.storage.close()
+    await dp.storage.wait_closed()
 
     logger.warning('Bye!')
 
