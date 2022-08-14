@@ -15,15 +15,15 @@ config = AutoConfig(search_path=env_path)
 
 GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION', default='0.31.0')
 
-API_TOKEN = config('API_TOKEN')
+API_TOKEN = config('API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890')
 
 # webhook settings
-WEBHOOK_HOST = config('WEBHOOK_HOST')
-WEBHOOK_PATH = config('WEBHOOK_PATH')
+WEBHOOK_HOST = config('WEBHOOK_HOST', default='')
+WEBHOOK_PATH = config('WEBHOOK_PATH', default='')
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = config('WEBAPP_HOST')  # or ip
-WEBAPP_PORT = config('WEBAPP_PORT', cast=int)
+WEBAPP_HOST = config('WEBAPP_HOST', default='')  # or ip
+WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=0)
 
-START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool)
+START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default='')
