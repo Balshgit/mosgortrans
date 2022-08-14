@@ -49,8 +49,7 @@ async def home_office(
     )
     message = 'Остановка Б. Академическая ул, д. 15'
 
-    loop = asyncio.get_running_loop()
-    text = await loop.run_in_executor(executor, parse_site, driver, url, message)
+    text = await asyncio.to_thread(parse_site, driver, url, message)
 
     # text = parse_site(
     #     driver=driver,
@@ -73,8 +72,7 @@ async def office_home(
     )
     message = 'Остановка Улица Алабяна'
 
-    loop = asyncio.get_running_loop()
-    text = await loop.run_in_executor(executor, parse_site, driver, url, message)
+    text = await asyncio.to_thread(parse_site, driver, url, message)
 
     # text = parse_site(
     #     driver=driver,
