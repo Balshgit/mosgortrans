@@ -1,4 +1,6 @@
 import asyncio
+import sys
+from pathlib import Path
 from typing import Any
 
 import aresponses
@@ -7,6 +9,9 @@ from aiogram import Bot
 
 BOT_ID = 123456789
 TOKEN = f'{BOT_ID}:AABBCCDDEEFFaabbccddeeff-1234567890'
+
+# include pytest directory in PATH
+sys.path.append(Path(__file__).parent.parent.as_posix())
 
 
 class FakeTelegram(aresponses.ResponsesMockServer):
