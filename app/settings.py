@@ -26,4 +26,4 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBAPP_HOST = config('WEBAPP_HOST', default='')  # or ip
 WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=0)
 
-START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default='')
+START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default=False)
