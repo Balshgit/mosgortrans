@@ -1,7 +1,7 @@
 import pytest
 from aiogram import Bot, types
 from app.tests.conftest import FakeTelegram
-from app.tests.factories import UserFactory
+from app.tests.data.factories import UserFactory
 
 pytestmark = [
     pytest.mark.asyncio,
