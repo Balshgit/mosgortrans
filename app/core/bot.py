@@ -50,6 +50,7 @@ async def home_office(
     message = 'Остановка Б. Академическая ул, д. 15'
 
     await asyncio.sleep(15)
+    await bot.send_message(417070387, 'World Hello')
 
     # text = parse_site(
     #     driver=driver,
@@ -73,6 +74,7 @@ async def office_home(
     message = 'Остановка Улица Алабяна'
 
     await asyncio.sleep(15)
+    await bot.send_message(417070387, 'Hello World')
 
     # text = parse_site(
     #     driver=driver,
