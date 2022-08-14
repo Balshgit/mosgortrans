@@ -6,7 +6,7 @@ from pathlib import Path
 import wget
 from core.logger import logger
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -31,7 +31,7 @@ def download_gecko_driver() -> None:
         logger.info(f'\ngeckodriver has been downloaded to folder {BASE_DIR}')
 
 
-def configure_firefox_driver(private_window: bool = False) -> WebDriver:
+def configure_firefox_driver(private_window: bool = False) -> WebDriver | None:
     opt = options.Options()
     opt.headless = True
     opt.add_argument('-profile')
@@ -39,12 +39,18 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver:
     if private_window:
         opt.set_preference("browser.privatebrowsing.autostart", True)
     service = Service(executable_path=BASE_DIR / 'geckodriver')
-    firefox_driver = webdriver.Firefox(service=service, options=opt)
+    try:
+        firefox_driver = webdriver.Firefox(service=service, options=opt)
+        return firefox_driver
+    except WebDriverException:
+        logger.error('Error configuring webdriver. Possible it already configured')
+        return None
 
-    return firefox_driver
 
-
-def parse_site(driver: WebDriver, url: str, message: str) -> str:
+def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
+    if not driver:
+        logger.error('Driver is not configured')
+        return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
     driver.get(url)
     time.sleep(4)
     elements = driver.find_elements(
