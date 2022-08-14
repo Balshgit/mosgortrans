@@ -1,9 +1,9 @@
 import pytest
 from aiogram import Bot, types
 from aiogram.dispatcher.filters.builtin import Command
+from app.core.bot import dispatcher
 from app.tests.conftest import FakeTelegram
 from app.tests.data.factories import UserFactory
-from core.bot import dispatcher
 
 pytestmark = [
     pytest.mark.asyncio,
