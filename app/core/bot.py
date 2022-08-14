@@ -49,7 +49,7 @@ async def home_office(
     )
     message = 'Остановка Б. Академическая ул, д. 15'
 
-    text = await asyncio.to_thread(parse_site, driver, url, message)
+    await asyncio.sleep(15)
 
     # text = parse_site(
     #     driver=driver,
@@ -58,7 +58,7 @@ async def home_office(
     #     message='Остановка Б. Академическая ул, д. 15',
     # )
 
-    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, message, reply_markup=get_keyboard())
 
 
 @dispatcher.callback_query_handler(stations_cb.filter(direction='office->home'))
@@ -72,7 +72,7 @@ async def office_home(
     )
     message = 'Остановка Улица Алабяна'
 
-    text = await asyncio.to_thread(parse_site, driver, url, message)
+    await asyncio.sleep(15)
 
     # text = parse_site(
     #     driver=driver,
@@ -80,7 +80,7 @@ async def office_home(
     #     'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
     #     message='Остановка Улица Алабяна',
     # )
-    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
+    return SendMessage(query.message.chat.id, message, reply_markup=get_keyboard())
 
 
 @dispatcher.message_handler(commands=['chatid'])
