@@ -1,6 +1,6 @@
 import factory
-from app.tests.data.models import User
 from faker import Faker
+from tests.data.models import User
 
 faker = Faker('ru_RU')
 

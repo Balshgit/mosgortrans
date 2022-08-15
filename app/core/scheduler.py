@@ -1,4 +1,4 @@
-from core.bot import morning_bus_mailing
+from app.core.bot import morning_bus_mailing
 
 cron_jobs = [
     {'trigger': 'cron', 'day_of_week': 'mon-fri', 'hour': 8, 'minute': 59, 'second': 0},

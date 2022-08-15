@@ -4,13 +4,13 @@ import time
 from pathlib import Path
 
 import wget
-from core.logger import logger
+from app.core.logger import logger
+from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
-from settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 
 def download_gecko_driver() -> None:
@@ -38,7 +38,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver | None:
     opt.add_argument(f'{Path.home()}/snap/firefox/common/.mozilla/firefox')
     if private_window:
         opt.set_preference("browser.privatebrowsing.autostart", True)
-    service = Service(executable_path=BASE_DIR / 'geckodriver')
+    service = Service(executable_path=(BASE_DIR / 'geckodriver').as_posix())
     try:
         firefox_driver = webdriver.Firefox(service=service, options=opt)
         return firefox_driver
