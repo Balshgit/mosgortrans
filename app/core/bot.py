@@ -40,24 +40,6 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
     return markup
 
 
-@dispatcher.message_handler(commands=['command1'])
-async def send_message_1(message: types.Message) -> None:
-
-    logger.info("command 1 started")
-    await asyncio.sleep(15)
-    await bot.send_message(message.chat.id, 'message 1 on screen')
-    logger.info('command 1 ends')
-
-
-@dispatcher.message_handler(commands=['command2'])
-async def send_message_2(message: types.Message) -> None:
-
-    logger.info("command 2 started")
-    await asyncio.sleep(15)
-    await bot.send_message(message.chat.id, 'message 2 on screen')
-    logger.info('command 2 ends')
-
-
 @dispatcher.callback_query_handler(stations_cb.filter(direction='home->office'))
 async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
@@ -89,7 +71,7 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> SendMessage:
-
+    logger.info('Hello World')
     return SendMessage(message.chat.id, message.chat.id)
 
 

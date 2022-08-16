@@ -1,5 +1,9 @@
-from aiogram import Dispatcher
+from http import HTTPStatus
+
+from aiogram import Bot, Dispatcher
+from aiogram.types import Update
 from aiogram.utils.executor import start_polling, start_webhook
+from aiohttp import web
 from app.core.bot import bot, dispatcher
 from app.core.logger import logger
 from app.core.scheduler import asyncio_schedule
@@ -53,8 +57,26 @@ def bot_webhook() -> None:
     )
 
 
+async def index(request: web.Request) -> web.Response:
+    data = await request.json()
+    Bot.set_current(dispatcher.bot)
+    Dispatcher.set_current(dispatcher)
+    tg_update = Update(**data)
+    await dispatcher.process_update(tg_update)
+    return web.Response(status=HTTPStatus.OK)
+
+
+async def create_app() -> web.Application:
+    app = web.Application()
+    app.router.add_post('/', index)
+    return app
+
+
 if __name__ == '__main__':
+
     if START_WITH_WEBHOOK:
         bot_webhook()
     else:
-        bot_polling()
+        # bot_polling()  # type: ignore
+        app = create_app()
+        web.run_app(app=app, host='localhost', port=8084)

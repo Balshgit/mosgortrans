@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from aiogram import Bot, types
 from aiogram.dispatcher.filters.builtin import Command
@@ -31,3 +33,31 @@ async def test_command1(bot: Bot) -> None:
         if handl:
             command = handl[0].filter.commands[0]
             assert command
+
+
+async def test_update() -> None:
+    data = {
+        "update_id": 957250703,
+        "message": {
+            "message_id": 417070387,
+            "from": {
+                "id": 417070387,
+                "is_bot": False,
+                "first_name": "Dmitry",
+                "last_name": "Afanasyev",
+                "username": "Balshtg",
+                "language_code": "en",
+            },
+            "chat": {
+                "id": 417070387,
+                "first_name": "Dmitry",
+                "last_name": "Afanasyev",
+                "username": "Balshtg",
+                "type": "private",
+            },
+            "date": time.time(),
+            "text": "/chatid",
+            "entities": [{"type": "bot_command", "offset": 0, "length": 7}],
+        },
+    }
+    assert data
