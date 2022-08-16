@@ -71,7 +71,6 @@ async def webhook(request: web.Request) -> web.Response:
     :return:
     """
     data = await request.json()
-    logger.info(data)
     tg_update = Update(**data)
 
     Dispatcher.set_current(dispatcher)
