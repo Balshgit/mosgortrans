@@ -66,9 +66,14 @@ async def webhook(request: web.Request) -> web.Response:
     return web.Response(status=HTTPStatus.OK)
 
 
+async def on_startup_gunicorn(app: web.Application) -> None:
+    await dispatcher.bot.set_webhook(WEBHOOK_URL)
+
+
 async def create_app() -> web.Application:
     application = web.Application()
     application.router.add_post('/', webhook)
+    application.on_startup.append(on_startup_gunicorn)
     return application
 
 
