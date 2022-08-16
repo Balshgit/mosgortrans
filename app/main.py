@@ -84,7 +84,7 @@ async def webhook(request: web.Request) -> web.Response:
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post(f'/{WEBHOOK_PATH}/{API_TOKEN}', webhook)
+    application.router.add_post(f'{WEBHOOK_PATH}/{API_TOKEN}', webhook)
     application.on_startup.append(on_startup_gunicorn)
     application.on_shutdown.append(on_shutdown_gunicorn)
     return application
