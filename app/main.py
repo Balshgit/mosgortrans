@@ -7,7 +7,14 @@ from aiohttp import web
 from app.core.bot import bot, dispatcher
 from app.core.logger import logger
 from app.core.scheduler import asyncio_schedule
-from app.settings import START_WITH_WEBHOOK, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL
+from app.settings import (
+    API_TOKEN,
+    START_WITH_WEBHOOK,
+    WEBAPP_HOST,
+    WEBAPP_PORT,
+    WEBHOOK_PATH,
+    WEBHOOK_URL,
+)
 
 
 async def bot_startup() -> None:
@@ -75,15 +82,9 @@ async def webhook(request: web.Request) -> web.Response:
     return web.Response(status=HTTPStatus.OK)
 
 
-async def hello_world(request: web.Request) -> web.Response:
-    logger.info(request)
-    return web.Response(body='Hello World')
-
-
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post('/', webhook)
-    application.router.add_post('/hello', hello_world)
+    application.router.add_post(f'/{WEBHOOK_PATH}/{API_TOKEN}', webhook)
     application.on_startup.append(on_startup_gunicorn)
     application.on_shutdown.append(on_shutdown_gunicorn)
     return application

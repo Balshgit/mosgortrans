@@ -20,7 +20,7 @@ API_TOKEN = config('API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234
 # webhook settings
 WEBHOOK_HOST = config('WEBHOOK_HOST', default='')
 WEBHOOK_PATH = config('WEBHOOK_PATH', default='')
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}/{API_TOKEN}"
 
 # webserver settings
 WEBAPP_HOST = config('WEBAPP_HOST', default='127.0.0.1')  # or ip
