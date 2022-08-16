@@ -3,7 +3,6 @@ import asyncio
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
 from app.core.parse_web import (
     configure_firefox_driver,
@@ -42,7 +41,7 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
 @dispatcher.callback_query_handler(stations_cb.filter(direction='home->office'))
 async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
-) -> SendMessage:
+) -> types.Message:
 
     text = parse_site(
         driver=driver,
@@ -51,13 +50,15 @@ async def home_office(
         message='Остановка Б. Академическая ул, д. 15',
     )
 
-    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
+    return await bot.send_message(
+        query.message.chat.id, text, reply_markup=get_keyboard()
+    )
 
 
 @dispatcher.callback_query_handler(stations_cb.filter(direction='office->home'))
 async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
-) -> SendMessage:
+) -> types.Message:
 
     text = parse_site(
         driver=driver,
@@ -65,17 +66,24 @@ async def office_home(
         'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
         message='Остановка Улица Алабяна',
     )
-    return SendMessage(query.message.chat.id, text, reply_markup=get_keyboard())
+    return await bot.send_message(
+        query.message.chat.id, text, reply_markup=get_keyboard()
+    )
 
 
 @dispatcher.message_handler(commands=['chatid'])
-async def chat_id(message: types.Message) -> SendMessage:
-    return SendMessage(message.chat.id, message.chat.id)
+async def chat_id(message: types.Message) -> types.Message:
+    from app.core.logger import logger
+
+    logger.info(message)
+    return await bot.send_message(message.chat.id, message.chat.id)
 
 
 @dispatcher.message_handler()
-async def echo(message: types.Message) -> SendMessage:
-    return SendMessage(message.chat.id, 'Выбери остановку', reply_markup=get_keyboard())
+async def echo(message: types.Message) -> types.Message:
+    return await bot.send_message(
+        message.chat.id, 'Выбери остановку', reply_markup=get_keyboard()
+    )
 
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:

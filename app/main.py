@@ -60,7 +60,6 @@ def bot_webhook() -> None:
 async def webhook(request: web.Request) -> web.Response:
     data = await request.json()
     tg_update = Update(**data)
-    logger.info(data)
     Dispatcher.set_current(dispatcher)
     Bot.set_current(dispatcher.bot)
     await dispatcher.process_update(tg_update)
@@ -70,6 +69,7 @@ async def webhook(request: web.Request) -> web.Response:
 async def on_startup_gunicorn(app: web.Application) -> None:
     await bot.set_webhook(WEBHOOK_URL)
     logger.info(f'Webhook set to {WEBHOOK_URL}')
+    asyncio_schedule()
 
 
 async def create_app() -> web.Application:
@@ -82,7 +82,6 @@ async def create_app() -> web.Application:
 if __name__ == '__main__':
 
     if START_WITH_WEBHOOK:
-        # bot_webhook()  # type: ignore
         app = create_app()
         web.run_app(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
     else:
