@@ -66,18 +66,17 @@ async def webhook(request: web.Request) -> web.Response:
     return web.Response(status=HTTPStatus.OK)
 
 
-def create_app() -> web.Application:
+async def create_app() -> web.Application:
     application = web.Application()
     application.router.add_post('/', webhook)
     return application
 
 
 if __name__ == '__main__':
-    import uvicorn
 
     if START_WITH_WEBHOOK:
         # bot_webhook()  # type: ignore
         app = create_app()
-        uvicorn.run(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+        web.run_app(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
     else:
         bot_polling()
