@@ -1,4 +1,5 @@
 import asyncio
+from concurrent.futures.thread import ThreadPoolExecutor
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -19,6 +20,8 @@ download_gecko_driver()
 driver = configure_firefox_driver()
 
 stations_cb = CallbackData('station', 'direction')
+
+executor = ThreadPoolExecutor(10)
 
 
 def get_keyboard() -> types.InlineKeyboardMarkup:
@@ -66,6 +69,7 @@ async def office_home(
         'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
         message='Остановка Улица Алабяна',
     )
+
     return await bot.send_message(
         query.message.chat.id, text, reply_markup=get_keyboard()
     )
@@ -73,9 +77,6 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> types.Message:
-    from app.core.logger import logger
-
-    logger.info(message)
     return await bot.send_message(message.chat.id, message.chat.id)
 
 
