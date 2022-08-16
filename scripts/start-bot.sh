@@ -13,5 +13,5 @@ cd /opt/mosgortrans \
   --chdir "/opt/mosgortrans/logs" \
   --log-level info \
   --error-logfile "/opt/mosgortrans/logs/gunicorn_err.log" \
-  --worker-tmp-dir '/tmp/shm' \
+  --worker-tmp-dir "/tmp" \
   --pid "/opt/mosgortrans/logs/gunicorn_pid"
