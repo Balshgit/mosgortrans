@@ -59,6 +59,7 @@ def bot_webhook() -> None:
 
 async def webhook(request: web.Request) -> web.Response:
     data = await request.json()
+    logger.info(data)
     Bot.set_current(dispatcher.bot)
     Dispatcher.set_current(dispatcher)
     tg_update = Update(**data)
