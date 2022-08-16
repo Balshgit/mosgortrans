@@ -25,3 +25,11 @@ killall python
 ## Help article
 
 [Пишем асинхронного Телеграм-бота](https://habr.com/ru/company/kts/blog/598575/)
+
+[fast_api_aiogram](https://programtalk.com/vs4/python/daya0576/he-weather-bot/telegram_bot/dependencies.py/)
+
+## TODO
+
+- [ ] Добавить очередь сообщений
+- [ ] Исправить запуск локально
+- [ ] Добавить тестов
