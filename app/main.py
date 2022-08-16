@@ -4,10 +4,10 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 from aiogram.utils.executor import start_polling, start_webhook
 from aiohttp import web
-from app.core.bot import bot, dispatcher
-from app.core.logger import logger
-from app.core.scheduler import asyncio_schedule
-from app.settings import (
+from core.bot import bot, dispatcher
+from core.logger import logger
+from core.scheduler import asyncio_schedule
+from settings import (
     START_WITH_WEBHOOK,
     WEBAPP_HOST,
     WEBAPP_PORT,
