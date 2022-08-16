@@ -4,13 +4,13 @@ import time
 from pathlib import Path
 
 import wget
-from core.logger import logger
+from app.core.logger import logger
+from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import WebDriver
-from settings import BASE_DIR, GECKO_DRIVER_VERSION
 
 
 def download_gecko_driver() -> None:

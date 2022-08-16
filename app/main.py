@@ -4,10 +4,10 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 from aiogram.utils.executor import start_polling, start_webhook
 from aiohttp import web
-from core.bot import bot, dispatcher
-from core.logger import logger
-from core.scheduler import asyncio_schedule
-from settings import (
+from app.core.bot import bot, dispatcher
+from app.core.logger import logger
+from app.core.scheduler import asyncio_schedule
+from app.settings import (
     START_WITH_WEBHOOK,
     WEBAPP_HOST,
     WEBAPP_PORT,
@@ -59,10 +59,10 @@ def bot_webhook() -> None:
 
 async def webhook(request: web.Request) -> web.Response:
     data = await request.json()
-    logger.info(data)
-    Bot.set_current(dispatcher.bot)
-    Dispatcher.set_current(dispatcher)
     tg_update = Update(**data)
+    logger.info(data)
+    Dispatcher.set_current(dispatcher)
+    Bot.set_current(dispatcher.bot)
     await dispatcher.process_update(tg_update)
     return web.Response(status=HTTPStatus.OK)
 
@@ -74,7 +74,7 @@ async def on_startup_gunicorn(app: web.Application) -> None:
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post('/transport', webhook)
+    application.router.add_post(WEBHOOK_PATH, webhook)
     application.on_startup.append(on_startup_gunicorn)
     return application
 
