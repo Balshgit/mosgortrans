@@ -5,7 +5,6 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.callback_data import CallbackData
-from app.core.logger import logger
 from app.core.parse_web import (
     configure_firefox_driver,
     download_gecko_driver,
@@ -71,7 +70,6 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> SendMessage:
-    logger.info('Hello World')
     return SendMessage(message.chat.id, message.chat.id)
 
 

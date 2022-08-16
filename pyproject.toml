@@ -14,6 +14,7 @@ loguru = "^0.6.0"
 python-decouple = "^3.6"
 apscheduler = "^3.9.1"
 SQLAlchemy = {version = "^1.4", extras = ["mypy", "asyncio"]}
+uvicorn = "^0.18"
 
 factory-boy = "^3.2.1"
 Faker = "^14.0.0"

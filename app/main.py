@@ -57,7 +57,7 @@ def bot_webhook() -> None:
     )
 
 
-async def index(request: web.Request) -> web.Response:
+async def webhook(request: web.Request) -> web.Response:
     data = await request.json()
     Bot.set_current(dispatcher.bot)
     Dispatcher.set_current(dispatcher)
@@ -66,17 +66,19 @@ async def index(request: web.Request) -> web.Response:
     return web.Response(status=HTTPStatus.OK)
 
 
-async def create_app() -> web.Application:
-    app = web.Application()
-    app.router.add_post('/', index)
-    return app
+def create_app() -> web.Application:
+    application = web.Application()
+    application.router.add_post('/', webhook)
+    return application
 
 
 if __name__ == '__main__':
+    import uvicorn
 
     if START_WITH_WEBHOOK:
-        bot_webhook()
-    else:
-        # bot_polling()  # type: ignore
+        # bot_webhook()  # type: ignore
         app = create_app()
-        web.run_app(app=app, host='localhost', port=8084)
+        uvicorn.run(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
+    else:
+        bot_polling()
+

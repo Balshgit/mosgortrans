@@ -23,7 +23,7 @@ WEBHOOK_PATH = config('WEBHOOK_PATH', default='')
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = config('WEBAPP_HOST', default='localhost')  # or ip
+WEBAPP_HOST = config('WEBAPP_HOST', default='127.0.0.1')  # or ip
 WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=8084)
 
 START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default=False)
