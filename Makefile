@@ -29,10 +29,3 @@ lint-complexity:
 # special commands
 lint-deps:
 	safety check --full-report
-
-# docker commands
-test-deps-up:
-	docker compose -f tests/docker-compose.yml up -d
-
-test-deps-down:
-	docker compose -f tests/docker-compose.yml down -v
