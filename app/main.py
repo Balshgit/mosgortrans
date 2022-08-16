@@ -74,7 +74,7 @@ async def on_startup_gunicorn(app: web.Application) -> None:
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post('/', webhook)
+    application.router.add_post('/transport', webhook)
     application.on_startup.append(on_startup_gunicorn)
     return application
 
