@@ -81,4 +81,3 @@ if __name__ == '__main__':
         uvicorn.run(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
     else:
         bot_polling()
-
