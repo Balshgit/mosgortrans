@@ -12,6 +12,6 @@ cd /opt/mosgortrans \
   --max-requests-jitter 400 \
   --chdir "/opt/mosgortrans/logs" \
   --log-level info \
-  --error-logfile "/opt/mosgortrans/logs" \
+  --error-logfile "/opt/mosgortrans/logs/gunicorn_err.log" \
   --worker-tmp-dir '/tmp/shm' \
   --pid "/opt/mosgortrans/logs/gunicorn_pid"
