@@ -32,7 +32,6 @@ async def bot_shutdown() -> None:
     # Close DB connection (if used)
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
-    app.close()
 
     logger.warning('Bye!')
 
