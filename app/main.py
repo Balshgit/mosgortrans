@@ -67,7 +67,7 @@ async def webhook(request: web.Request) -> web.Response:
 
 
 async def on_startup_gunicorn(app: web.Application) -> None:
-    await dispatcher.bot.set_webhook(WEBHOOK_URL)
+    await Bot.get_current().set_webhook(WEBHOOK_URL)
 
 
 async def create_app() -> web.Application:
