@@ -86,8 +86,9 @@ async def webhook(request: web.Request) -> web.Response:
     """
     data = await request.json()
     tg_update = Update(**data)
-    queue.put_nowait(tg_update)
     logger.info(tg_update)
+    queue.put_nowait(tg_update)
+    logger.info('Put in queue')
     return web.Response(status=HTTPStatus.ACCEPTED)
 
 
