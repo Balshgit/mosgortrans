@@ -97,10 +97,10 @@ async def worker() -> None:
     Bot.set_current(dispatcher.bot)
 
     while True:
+        await asyncio.sleep(1)
         update = await queue.get()
         logger.warning(f"Get update {update}")
         await dispatcher.process_update(update)
-        await asyncio.sleep(1)
 
 
 async def create_app() -> web.Application:
