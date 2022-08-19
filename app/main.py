@@ -2,7 +2,6 @@ import asyncio
 import sys
 from http import HTTPStatus
 from pathlib import Path
-from typing import Any
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import Update
@@ -23,7 +22,7 @@ from app.settings import (
     WEBHOOK_URL,
 )
 
-queue: Any = asyncio.Queue()
+queue: asyncio.Queue = asyncio.Queue()  # type: ignore
 
 
 async def bot_startup() -> None:
@@ -88,6 +87,7 @@ async def webhook(request: web.Request) -> web.Response:
     data = await request.json()
     tg_update = Update(**data)
     queue.put_nowait(tg_update)
+    logger.info(tg_update)
     return web.Response(status=HTTPStatus.ACCEPTED)
 
 
@@ -97,6 +97,7 @@ async def worker() -> None:
 
     while True:
         update = await queue.get()
+        logger.warning(f"Get update {update}")
         await dispatcher.process_update(update)
         await asyncio.sleep(1)
 
