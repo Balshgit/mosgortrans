@@ -29,7 +29,9 @@ async def bot_startup() -> None:
     await bot.set_webhook(WEBHOOK_URL)
     logger.info(f'Webhook set to {WEBHOOK_URL}'.replace(API_TOKEN, '{BOT_API_TOKEN}'))
     asyncio_schedule()
+    logger.info('Scheduler started')
     await worker()
+    logger.info('Worker started')
 
 
 async def bot_shutdown() -> None:
@@ -95,9 +97,10 @@ async def webhook(request: web.Request) -> web.Response:
 async def worker() -> None:
     Dispatcher.set_current(dispatcher)
     Bot.set_current(dispatcher.bot)
-
+    await asyncio.sleep(3)
+    logger.info('Worker is working')
     while True:
-        await asyncio.sleep(1)
+        await asyncio.sleep(4)
         update = await queue.get()
         logger.warning(f"Get update {update}")
         await dispatcher.process_update(update)
