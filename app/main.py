@@ -1,9 +1,15 @@
+import asyncio
+import sys
 from http import HTTPStatus
+from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 from aiogram.utils.executor import start_polling
 from aiohttp import web
+
+sys.path.append(str(Path(__file__).parent.parent))
+
 from app.core.bot import bot, dispatcher
 from app.core.logger import logger
 from app.core.scheduler import asyncio_schedule
@@ -19,7 +25,7 @@ from app.settings import (
 
 async def bot_startup() -> None:
     await bot.set_webhook(WEBHOOK_URL)
-    logger.info(f'Webhook set to {WEBHOOK_URL}')
+    logger.info(f'Webhook set to {WEBHOOK_URL}'.replace(API_TOKEN, '{BOT_API_TOKEN}'))
     asyncio_schedule()
 
 
@@ -32,6 +38,11 @@ async def bot_shutdown() -> None:
     # Close DB connection (if used)
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
+
+    session = await bot.get_session()
+    if session and not session.closed:
+        await session.close()
+        await asyncio.sleep(0.2)
 
     logger.warning('Bye!')
 

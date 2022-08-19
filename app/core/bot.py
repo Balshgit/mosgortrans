@@ -1,5 +1,4 @@
 import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -21,8 +20,6 @@ download_gecko_driver()
 driver = configure_firefox_driver()
 
 stations_cb = CallbackData('station', 'direction')
-
-executor = ThreadPoolExecutor(10)
 
 
 def get_keyboard() -> types.InlineKeyboardMarkup:

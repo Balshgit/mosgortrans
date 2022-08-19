@@ -1,8 +1,9 @@
 import time
 
 import pytest
-from aiogram import Bot, types
+from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters.builtin import Command
+from aiogram.types import Update
 from app.core.bot import dispatcher
 from tests.conftest import FakeTelegram
 from tests.data.factories import UserFactory
@@ -35,7 +36,8 @@ async def test_command1(bot: Bot) -> None:
             assert command
 
 
-async def test_update() -> None:
+async def test_update(dispatcher_fixture: Dispatcher, bot: Bot) -> None:
+
     data = {
         "update_id": 957250703,
         "message": {
@@ -60,4 +62,9 @@ async def test_update() -> None:
             "entities": [{"type": "bot_command", "offset": 0, "length": 7}],
         },
     }
-    assert data
+    async with FakeTelegram(message_data=data):
+        update = Update(**data)
+        dispatcher_fixture.message_handler()
+        await dispatcher_fixture.process_update(update)
+
+    assert True

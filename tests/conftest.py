@@ -3,7 +3,7 @@ from typing import Any
 
 import aresponses
 import pytest
-from aiogram import Bot
+from aiogram import Bot, Dispatcher
 
 BOT_ID = 123456789
 TOKEN = f'{BOT_ID}:AABBCCDDEEFFaabbccddeeff-1234567890'
@@ -57,6 +57,18 @@ async def bot_fixture() -> Bot:
 
     bot = Bot(TOKEN)
     yield bot
+    session = await bot.get_session()
+    if session and not session.closed:
+        await session.close()
+        await asyncio.sleep(0.2)
+
+
+@pytest.fixture()
+async def dispatcher_fixture(bot: Bot) -> Dispatcher:
+    """Dispatcher fixture."""
+
+    dp = Dispatcher(bot)
+    yield dp
     session = await bot.get_session()
     if session and not session.closed:
         await session.close()

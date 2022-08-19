@@ -52,7 +52,7 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
         logger.error('Driver is not configured')
         return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
     driver.get(url)
-    time.sleep(4)
+    time.sleep(1)
     elements = driver.find_elements(
         by='class name', value='masstransit-vehicle-snippet-view'
     )
