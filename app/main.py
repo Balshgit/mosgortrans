@@ -98,6 +98,7 @@ async def worker() -> None:
     while True:
         update = await queue.get()
         await dispatcher.process_update(update)
+        await asyncio.sleep(1)
 
 
 async def create_app() -> web.Application:
