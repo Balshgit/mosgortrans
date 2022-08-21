@@ -22,9 +22,12 @@ from app.settings import (
     WEBHOOK_URL,
 )
 
+queue = asyncio.Queue()  # type: ignore
+
 
 async def bot_startup() -> None:
     await bot.set_webhook(WEBHOOK_URL)
+    asyncio.create_task(get_updates_from_queue())
     logger.info(f'Webhook set to {WEBHOOK_URL}'.replace(API_TOKEN, '{BOT_API_TOKEN}'))
     asyncio_schedule()
 
@@ -74,7 +77,7 @@ def bot_polling() -> None:
     )
 
 
-async def webhook(request: web.Request) -> web.Response:
+async def put_updates_on_queue(request: web.Request) -> web.Response:
     """
     Listen {WEBHOOK_PATH} and proxy post request to bot
 
@@ -83,18 +86,25 @@ async def webhook(request: web.Request) -> web.Response:
     """
     data = await request.json()
     tg_update = Update(**data)
+    queue.put_nowait(tg_update)
+    logger.info(queue.__dict__)
+
+    return web.Response(status=HTTPStatus.ACCEPTED)
+
+
+async def get_updates_from_queue() -> None:
+    update = await queue.get()
 
     Dispatcher.set_current(dispatcher)
     Bot.set_current(dispatcher.bot)
 
-    await dispatcher.process_update(tg_update)
-
-    return web.Response(status=HTTPStatus.OK)
+    await dispatcher.process_update(update)
+    await asyncio.sleep(0.2)
 
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post(f'{WEBHOOK_PATH}/{API_TOKEN}', webhook)
+    application.router.add_post(f'{WEBHOOK_PATH}/{API_TOKEN}', put_updates_on_queue)
     application.on_startup.append(on_startup_gunicorn)
     application.on_shutdown.append(on_shutdown_gunicorn)
     return application

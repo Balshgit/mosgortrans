@@ -9,7 +9,7 @@ cron_jobs = [
 user_chat_ids = {
     'chat_ids': [
         417070387,  # me
-        431571617,  # Lenok
+        # 431571617,  # Lenok
     ]
 }
 
