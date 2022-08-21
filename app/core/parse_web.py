@@ -7,10 +7,14 @@ import wget
 from app.core.logger import logger
 from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    StaleElementReferenceException,
+    WebDriverException,
+)
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.firefox.webdriver import RemoteWebDriver, WebDriver
 
 
 def download_gecko_driver() -> None:
@@ -52,7 +56,7 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
         logger.error('Driver is not configured')
         return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
     driver.get(url)
-    time.sleep(1)
+    time.sleep(5)
     elements = driver.find_elements(
         by='class name', value='masstransit-vehicle-snippet-view'
     )
@@ -68,9 +72,6 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
             bus_300_arrival = element.find_element(
                 by='class name', value='masstransit-prognoses-view__title-text'
             )
-        except NoSuchElementException:
-            pass
-        try:
             bus_t19 = element.find_element(
                 by='css selector', value='[aria-label="т19"]'
             )
@@ -79,6 +80,9 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
             )
         except NoSuchElementException:
             pass
+        except StaleElementReferenceException:
+            pass
+
     answer = f'{message}\n\n'
     if not all([bus_300, bus_t19]) or not all([bus_300_arrival, bus_t19_arrival]):
         return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
@@ -86,4 +90,14 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
         answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
     if bus_t19 and bus_t19_arrival:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
+    print(answer)
     return answer
+
+
+def get_driver() -> RemoteWebDriver:
+    opt = options.Options()
+    opt.headless = True
+    driver = RemoteWebDriver(
+        command_executor='http://main-server.lan:4444/wd/hub', options=opt
+    )
+    return driver

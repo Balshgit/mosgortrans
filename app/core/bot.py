@@ -1,25 +1,20 @@
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.logger import logger
-from app.core.parse_web import (
-    configure_firefox_driver,
-    download_gecko_driver,
-    parse_site,
-)
+from app.core.parse_web import get_driver, parse_site
 from app.settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
-download_gecko_driver()
-driver = configure_firefox_driver()
-
 stations_cb = CallbackData('station', 'direction')
+
+executor = ThreadPoolExecutor(10)
 
 
 def get_keyboard() -> types.InlineKeyboardMarkup:
@@ -44,12 +39,16 @@ async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
 
-    text = parse_site(
-        driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
-        message='Остановка Б. Академическая ул, д. 15',
+    driver = get_driver()
+
+    url = (
+        'https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
     )
+    message = 'Остановка Б. Академическая ул, д. 15'
+
+    loop = asyncio.get_running_loop()
+    text = await loop.run_in_executor(executor, parse_site, url, message, driver)
 
     return await bot.send_message(
         query.message.chat.id, text, reply_markup=get_keyboard()
@@ -61,12 +60,16 @@ async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
 
-    text = parse_site(
-        driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
-        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
-        message='Остановка Улица Алабяна',
+    driver = get_driver()
+
+    url = (
+        'https://yandex.ru/maps/213/moscow/stops/stop__9640288/'
+        '?l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211'
     )
+    message = 'Остановка Улица Алабяна'
+
+    loop = asyncio.get_running_loop()
+    text = await loop.run_in_executor(executor, parse_site, url, message, driver)
 
     return await bot.send_message(
         query.message.chat.id, text, reply_markup=get_keyboard()
@@ -86,12 +89,16 @@ async def echo(message: types.Message) -> types.Message:
 
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:
-    text = parse_site(
-        driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
-        message='Остановка Б. Академическая ул, д. 15',
+    driver = get_driver()
+
+    url = (
+        'https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
+        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21'
     )
+    message = 'Остановка Б. Академическая ул, д. 15'
+
+    loop = asyncio.get_running_loop()
+    text = await loop.run_in_executor(executor, parse_site, url, message, driver)
     await asyncio.gather(
         *[
             bot.send_message(
