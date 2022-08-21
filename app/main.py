@@ -3,7 +3,7 @@ import sys
 from http import HTTPStatus
 from pathlib import Path
 
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher
 from aiogram.types import Update
 from aiogram.utils.executor import start_polling
 from aiohttp import web
@@ -88,19 +88,16 @@ async def put_updates_on_queue(request: web.Request) -> web.Response:
     data = await request.json()
     tg_update = Update(**data)
     queue.put_nowait(tg_update)
-    logger.info(queue.__dict__)
 
     return web.Response(status=HTTPStatus.ACCEPTED)
 
 
 async def get_updates_from_queue() -> None:
-    update = await queue.get()
 
-    Dispatcher.set_current(dispatcher)
-    Bot.set_current(dispatcher.bot)
-
-    await dispatcher.process_update(update)
-    await asyncio.sleep(0.2)
+    while True:
+        update = await queue.get()
+        await dispatcher.process_update(update)
+        await asyncio.sleep(0.1)
 
 
 async def create_app() -> web.Application:
