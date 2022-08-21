@@ -27,7 +27,8 @@ queue = asyncio.Queue()  # type: ignore
 
 async def bot_startup() -> None:
     await bot.set_webhook(WEBHOOK_URL)
-    asyncio.create_task(get_updates_from_queue())
+    loop = asyncio.get_running_loop()
+    loop.create_task(get_updates_from_queue())
     logger.info(f'Webhook set to {WEBHOOK_URL}'.replace(API_TOKEN, '{BOT_API_TOKEN}'))
     asyncio_schedule()
 
