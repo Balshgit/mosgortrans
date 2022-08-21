@@ -75,7 +75,6 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> types.Message:
-    logger.info(message.chat.id)
     return await bot.send_message(message.chat.id, message.chat.id)
 
 
