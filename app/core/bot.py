@@ -4,7 +4,6 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.logger import logger
 from app.core.parse_web import (
     configure_firefox_driver,
     download_gecko_driver,
