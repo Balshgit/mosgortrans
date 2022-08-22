@@ -1,0 +1,4 @@
+FROM selenoid/firefox:103.0 as builder
+
+FROM aerokube/selenoid:latest-release
+

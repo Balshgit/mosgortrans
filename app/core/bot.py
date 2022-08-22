@@ -4,20 +4,16 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.logger import logger
-from app.core.parse_web import (
-    configure_firefox_driver,
-    download_gecko_driver,
-    parse_site,
-)
+from app.core.parse_web import get_driver, get_driver_session, parse_site
 from app.settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
-download_gecko_driver()
-driver = configure_firefox_driver()
+
+driver = get_driver()
+session_id = get_driver_session(driver)
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -86,6 +82,7 @@ async def echo(message: types.Message) -> types.Message:
 
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:
+
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'

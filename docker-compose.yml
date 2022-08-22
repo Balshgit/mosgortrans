@@ -1,0 +1,48 @@
+version: '3.9'
+
+networks:
+  transport_bot_network:
+    name:
+      "transport_bot_network"
+    ipam:
+      config:
+        - subnet: 200.20.0.0/24
+
+services:
+  selenoid:
+    container_name: "transport_bot_selenoid"
+    hostname: "selenoid_host"
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile.selenoid
+      args:
+        USER: web
+    restart: unless-stopped
+    networks:
+      transport_bot_network:
+        ipv4_address: 200.20.0.10
+    volumes:
+      - ./deploy/browsers.json:/etc/selenoid/browsers.json:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SESSION_TIMED_OUT=12h
+    command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10", "-container-network", "transport_bot_network"]
+    expose:
+      - "4444"
+
+  bot:
+    container_name: "transport_bot"
+    image: "transport_bot:latest"
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile.bot
+      args:
+        USER: web
+    restart: unless-stopped
+    networks:
+      transport_bot_network:
+        ipv4_address: 200.20.0.11
+    ports:
+      - "8084:8084"
+    command: >
+      bash -c "python main.py"

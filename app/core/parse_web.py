@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.firefox.webdriver import RemoteWebDriver, WebDriver
 
 
 def download_gecko_driver() -> None:
@@ -47,7 +47,7 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver | None:
         return None
 
 
-def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
+def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) -> str:
     if not driver:
         logger.error('Driver is not configured')
         return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
@@ -87,3 +87,16 @@ def parse_site(url: str, message: str, driver: WebDriver | None = None) -> str:
     if bus_t19 and bus_t19_arrival:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
     return answer
+
+
+def get_driver() -> RemoteWebDriver:
+    opt = options.Options()
+    opt.headless = True
+    driver = RemoteWebDriver(
+        command_executor='http://selenoid_host:4444/wd/hub', options=opt
+    )
+    return driver
+
+
+def get_driver_session(driver: RemoteWebDriver) -> str:
+    return driver.session_id  # type: ignore
