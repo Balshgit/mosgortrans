@@ -6,6 +6,6 @@ After=network-online.target
 Restart=always
 WorkingDirectory=/opt/mosgortrans
 ExecStart=/usr/local/bin/docker-compose -f /opt/mosgortrans/docker-compose.yml up
-ExecStop=/usr/local/bin/docker-compose -f /opt/mosgortrans/docker-compose.yml down -v
+ExecStop=/usr/local/bin/docker-compose -f /opt/mosgortrans/docker-compose.yml down
 [Install]
 WantedBy=multi-user.target

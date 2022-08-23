@@ -15,12 +15,14 @@ config = AutoConfig(search_path=env_path)
 
 GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION', default='0.31.0')
 
-API_TOKEN = config('API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890')
+TELEGRAM_API_TOKEN = config(
+    'API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890'
+)
 
 # webhook settings
 WEBHOOK_HOST = config('WEBHOOK_HOST', default='')
 WEBHOOK_PATH = config('WEBHOOK_PATH', default='')
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}/{API_TOKEN}"
+WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}/{TELEGRAM_API_TOKEN}"
 
 # webserver settings
 WEBAPP_HOST = config('WEBAPP_HOST', default='127.0.0.1')  # or ip

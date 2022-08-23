@@ -14,8 +14,8 @@ from app.core.bot import bot, dispatcher
 from app.core.logger import logger
 from app.core.scheduler import asyncio_schedule
 from app.settings import (
-    API_TOKEN,
     START_WITH_WEBHOOK,
+    TELEGRAM_API_TOKEN,
     WEBAPP_HOST,
     WEBAPP_PORT,
     WEBHOOK_PATH,
@@ -30,7 +30,11 @@ async def on_startup(dp: Dispatcher) -> None:
     await bot.set_webhook(WEBHOOK_URL)
     loop = asyncio.get_running_loop()
     loop.create_task(get_updates_from_queue())
-    logger.info(f'Webhook set to {WEBHOOK_URL}'.replace(API_TOKEN, '{BOT_API_TOKEN}'))
+    logger.info(
+        f'Webhook set to {WEBHOOK_URL}'.replace(
+            TELEGRAM_API_TOKEN, '{TELEGRAM_API_TOKEN}'
+        )
+    )
     asyncio_schedule()
 
 
@@ -80,7 +84,9 @@ async def get_updates_from_queue() -> None:
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_post(f'{WEBHOOK_PATH}/{API_TOKEN}', put_updates_on_queue)
+    application.router.add_post(
+        f'{WEBHOOK_PATH}/{TELEGRAM_API_TOKEN}', put_updates_on_queue
+    )
     application.on_startup.append(on_startup)
     application.on_shutdown.append(on_shutdown)
     return application

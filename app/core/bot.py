@@ -5,9 +5,9 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
 from app.core.parse_web import get_driver, parse_site
-from app.settings import API_TOKEN
+from app.settings import TELEGRAM_API_TOKEN
 
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=TELEGRAM_API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
