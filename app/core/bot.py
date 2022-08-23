@@ -4,16 +4,13 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.parse_web import get_driver, get_driver_session, parse_site
+from app.core.parse_web import get_driver, parse_site
 from app.settings import API_TOKEN
 
 bot = Bot(token=API_TOKEN)
 dispatcher = Dispatcher(bot)
 dispatcher.middleware.setup(LoggingMiddleware())
 
-
-driver = get_driver()
-session_id = get_driver_session(driver)
 
 stations_cb = CallbackData('station', 'direction')
 
@@ -39,6 +36,7 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
 async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
+    driver = get_driver()
 
     text = parse_site(
         driver=driver,
@@ -56,7 +54,7 @@ async def home_office(
 async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
-
+    driver = get_driver()
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
@@ -82,7 +80,7 @@ async def echo(message: types.Message) -> types.Message:
 
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:
-
+    driver = get_driver()
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'

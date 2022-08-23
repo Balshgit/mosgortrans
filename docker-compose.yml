@@ -24,8 +24,6 @@ services:
     volumes:
       - ./deploy/browsers.json:/etc/selenoid/browsers.json:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - SESSION_TIMED_OUT=12h
     command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10", "-container-network", "transport_bot_network"]
     expose:
       - "4444"
@@ -44,5 +42,4 @@ services:
         ipv4_address: 200.20.0.11
     ports:
       - "8084:8084"
-    command: >
-      bash -c "python main.py"
+    command: bash start-bot.sh

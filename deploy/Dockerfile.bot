@@ -56,6 +56,8 @@ RUN poetry version \
   && if [ "$USER" != 'root' ]; then rm -rf "$POETRY_CACHE_DIR"; fi
 
 COPY --chown="$USER":"$USER" ./app /app/
+COPY ./scripts/start-bot.sh .
+RUN chmod +x ./start-bot.sh
 
 USER "$USER"
 
