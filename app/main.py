@@ -75,6 +75,10 @@ async def put_updates_on_queue(request: web.Request) -> web.Response:
     return web.Response(status=HTTPStatus.ACCEPTED)
 
 
+async def health_check(request: web.Request) -> web.Response:
+    return web.Response(text='Health OK', status=HTTPStatus.OK)
+
+
 async def get_updates_from_queue() -> None:
 
     while True:
@@ -85,6 +89,7 @@ async def get_updates_from_queue() -> None:
 
 async def create_app() -> web.Application:
     application = web.Application()
+    application.router.add_get('/', health_check)
     application.router.add_post(
         f'{WEBHOOK_PATH}/{TELEGRAM_API_TOKEN}', put_updates_on_queue
     )

@@ -16,7 +16,7 @@ config = AutoConfig(search_path=env_path)
 GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION', default='0.31.0')
 
 TELEGRAM_API_TOKEN = config(
-    'API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890'
+    'TELEGRAM_API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890'
 )
 
 # webhook settings
