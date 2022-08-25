@@ -1,0 +1,11 @@
+:8084 {
+    header Strict-Transport-Security max-age=31536000
+
+    # Removing some headers for improved security:
+    header -Server
+
+    route /transport/{$TELEGRAM_API_TOKEN} {
+      reverse_proxy transport_bot:8084
+    }
+}
+
