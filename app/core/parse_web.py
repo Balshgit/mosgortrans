@@ -103,7 +103,3 @@ def get_driver(ttl_hash: int | None = None) -> RemoteWebDriver:
         command_executor='http://selenoid_host:4444/wd/hub', options=opt
     )
     return driver
-
-
-def get_driver_session(driver: RemoteWebDriver) -> str:
-    return driver.session_id  # type: ignore

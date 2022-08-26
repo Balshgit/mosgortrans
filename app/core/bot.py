@@ -4,7 +4,6 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.logger import logger
 from app.core.parse_web import get_driver, get_ttl_hash, parse_site
 from app.settings import TELEGRAM_API_TOKEN
 
@@ -69,8 +68,6 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> types.Message:
-    driver = get_driver(ttl_hash=get_ttl_hash())
-    logger.info(driver.session_id)
     return await bot.send_message(message.chat.id, message.chat.id)
 
 
