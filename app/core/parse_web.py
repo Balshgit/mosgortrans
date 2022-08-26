@@ -8,7 +8,11 @@ import wget
 from app.core.logger import logger
 from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    StaleElementReferenceException,
+    WebDriverException,
+)
 from selenium.webdriver.firefox import options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.webdriver import RemoteWebDriver, WebDriver
@@ -69,9 +73,6 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
             bus_300_arrival = element.find_element(
                 by='class name', value='masstransit-prognoses-view__title-text'
             )
-        except NoSuchElementException:
-            pass
-        try:
             bus_t19 = element.find_element(
                 by='css selector', value='[aria-label="т19"]'
             )
@@ -79,6 +80,8 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
                 by='class name', value='masstransit-prognoses-view__title-text'
             )
         except NoSuchElementException:
+            pass
+        except StaleElementReferenceException:
             pass
     answer = f'{message}\n\n'
     if not all([bus_300, bus_t19]) or not all([bus_300_arrival, bus_t19_arrival]):
@@ -97,6 +100,7 @@ def get_ttl_hash(seconds: int = 28) -> int:
 
 @lru_cache
 def get_driver(ttl_hash: int | None = None) -> RemoteWebDriver:
+    del ttl_hash
     opt = options.Options()
     opt.headless = True
     driver = RemoteWebDriver(
