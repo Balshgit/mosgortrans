@@ -1,6 +1,7 @@
 import os
 import tarfile
 import time
+from functools import lru_cache
 from pathlib import Path
 
 import wget
@@ -89,7 +90,13 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
     return answer
 
 
-def get_driver() -> RemoteWebDriver:
+def get_ttl_hash(seconds: int = 28) -> int:
+    """Return the same value withing `seconds` time period"""
+    return round(time.time() / seconds)
+
+
+@lru_cache
+def get_driver(ttl_hash: int | None = None) -> RemoteWebDriver:
     opt = options.Options()
     opt.headless = True
     driver = RemoteWebDriver(

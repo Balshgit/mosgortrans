@@ -4,7 +4,8 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.parse_web import get_driver, parse_site
+from app.core.logger import logger
+from app.core.parse_web import get_driver, get_ttl_hash, parse_site
 from app.settings import TELEGRAM_API_TOKEN
 
 bot = Bot(token=TELEGRAM_API_TOKEN)
@@ -36,8 +37,7 @@ def get_keyboard() -> types.InlineKeyboardMarkup:
 async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
-    driver = get_driver()
-
+    driver = get_driver(ttl_hash=get_ttl_hash(seconds=10))
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
@@ -54,7 +54,7 @@ async def home_office(
 async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
-    driver = get_driver()
+    driver = get_driver(ttl_hash=get_ttl_hash())
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
@@ -69,6 +69,8 @@ async def office_home(
 
 @dispatcher.message_handler(commands=['chatid'])
 async def chat_id(message: types.Message) -> types.Message:
+    driver = get_driver(ttl_hash=get_ttl_hash())
+    logger.info(driver.session_id)
     return await bot.send_message(message.chat.id, message.chat.id)
 
 
@@ -80,7 +82,7 @@ async def echo(message: types.Message) -> types.Message:
 
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:
-    driver = get_driver()
+    driver = get_driver(ttl_hash=get_ttl_hash())
     text = parse_site(
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'

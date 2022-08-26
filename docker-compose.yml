@@ -44,6 +44,8 @@ services:
       args:
         USER: web
     restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     networks:
       transport_bot_network:
         ipv4_address: 200.20.0.11
