@@ -24,13 +24,16 @@ services:
       args:
         USER: web
     restart: unless-stopped
+    environment:
+      - SESSION_TIMED_OUT=30s
     networks:
       transport_bot_network:
         ipv4_address: 200.20.0.10
     volumes:
       - ./deploy/browsers.json:/etc/selenoid/browsers.json:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10", "-container-network", "transport_bot_network"]
+    command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10",
+              "-container-network", "transport_bot_network", "-timeout", "30s"]
     expose:
       - "4444"
 

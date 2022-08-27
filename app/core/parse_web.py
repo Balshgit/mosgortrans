@@ -1,12 +1,11 @@
 import os
 import tarfile
 import time
-from functools import lru_cache
 from pathlib import Path
 
 import wget
-from app.core.logger import logger
-from app.settings import BASE_DIR, GECKO_DRIVER_VERSION
+from app.core.utils import logger, timed_cache
+from app.settings import BASE_DIR, DRIVER_SESSION_TTL, GECKO_DRIVER_VERSION
 from selenium import webdriver
 from selenium.common.exceptions import (
     NoSuchElementException,
@@ -93,14 +92,8 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
     return answer
 
 
-def get_ttl_hash(seconds: int = 28) -> int:
-    """Return the same value withing `seconds` time period"""
-    return round(time.time() / seconds)
-
-
-@lru_cache
-def get_driver(ttl_hash: int | None = None) -> RemoteWebDriver:
-    del ttl_hash
+@timed_cache(seconds=DRIVER_SESSION_TTL)
+def get_driver() -> RemoteWebDriver:
     opt = options.Options()
     opt.headless = True
     driver = RemoteWebDriver(

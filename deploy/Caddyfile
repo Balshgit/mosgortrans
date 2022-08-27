@@ -4,7 +4,7 @@
     # Removing some headers for improved security:
     header -Server
 
-    route /transport/{$TELEGRAM_API_TOKEN} {
+    route /transport/* {
       reverse_proxy transport_bot:8084
     }
 }

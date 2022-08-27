@@ -11,8 +11,8 @@ from aiohttp import web
 sys.path.append(str(Path(__file__).parent.parent))
 
 from app.core.bot import bot, dispatcher
-from app.core.logger import logger
 from app.core.scheduler import asyncio_schedule
+from app.core.utils import logger
 from app.settings import (
     START_WITH_WEBHOOK,
     TELEGRAM_API_TOKEN,
@@ -88,7 +88,7 @@ async def get_updates_from_queue() -> None:
 
 async def create_app() -> web.Application:
     application = web.Application()
-    application.router.add_get('/', health_check)
+    application.router.add_get(f'{WEBHOOK_PATH}/', health_check)
     application.router.add_post(
         f'{WEBHOOK_PATH}/{TELEGRAM_API_TOKEN}', put_updates_on_queue
     )
