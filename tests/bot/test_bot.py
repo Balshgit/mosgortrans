@@ -13,7 +13,7 @@ pytestmark = [
 ]
 
 
-async def test_parse_site(bot: Bot) -> None:
+async def test_parse_yandex_maps(bot: Bot) -> None:
     tg_user = UserFactory().as_dict()
     user = types.User(**tg_user)
 

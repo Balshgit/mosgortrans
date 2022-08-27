@@ -1,6 +1,7 @@
 import os
 import tarfile
 import time
+from collections import defaultdict
 from pathlib import Path
 
 import wget
@@ -51,50 +52,52 @@ def configure_firefox_driver(private_window: bool = False) -> WebDriver | None:
         return None
 
 
-def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) -> str:
+def parse_yandex_maps(
+    url: str, message: str, driver: RemoteWebDriver | None = None
+) -> str:
     if not driver:
         logger.error('Driver is not configured')
         return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
+
     driver.get(url)
     time.sleep(1)
 
-    bus_300, bus_t19 = None, None
-    bus_300_arrival, bus_t19_arrival = None, None
+    bus_arrival: dict[str, str | None] = defaultdict(str)
 
-    elements = driver.find_elements(
-        by='class name', value='masstransit-brief-schedule-view'
-    )
+    try:
+        web_elements = driver.find_elements(
+            by='class name', value='masstransit-vehicle-snippet-view'
+        )
+        for web_element in web_elements:
+            bus = web_element.find_element(
+                by='class name', value='masstransit-vehicle-snippet-view__main-text'
+            )
+            if bus:
+                bus_arrival_time = web_element.find_element(
+                    by='class name',
+                    value='masstransit-prognoses-view__title-text',
+                )
+                match bus.text:
+                    case "300":
+                        bus_arrival["Автобус 300"] = (
+                            bus_arrival_time.text if bus_arrival_time else None
+                        )
+                    case "т19":
+                        bus_arrival["Автобус Т19"] = (
+                            bus_arrival_time.text if bus_arrival_time else None
+                        )
+    except NoSuchElementException:
+        pass
+    except StaleElementReferenceException:
+        pass
 
-    for element in elements:
-        try:
-            bus_300 = element.find_element(
-                by='css selector', value='[aria-label="300"]'
-            )
-            bus_300_arrival = element.find_element(
-                by='class name', value='masstransit-prognoses-view__title-text'
-            )
-            bus_t19 = element.find_element(
-                by='css selector', value='[aria-label="т19"]'
-            )
-            bus_t19_arrival = element.find_element(
-                by='class name', value='masstransit-prognoses-view__title-text'
-            )
-        except NoSuchElementException:
-            pass
-        except StaleElementReferenceException:
-            pass
-    no_bus_at_all = True
-    answer = f'{message}\n\n'
-    if bus_300 and bus_300_arrival:
-        answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
-        no_bus_at_all = False
-    if bus_t19 and bus_t19_arrival:
-        answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
-        no_bus_at_all = False
-    if not no_bus_at_all:
-        return answer
-    if no_bus_at_all:
+    if not any(bus_arrival.values()):
         return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
+
+    answer = f'{message}\n\n'
+    for bus_name, arrival_time in bus_arrival.items():
+        answer += f'{bus_name} - {arrival_time}\n'
+    return answer
 
 
 @timed_cache(seconds=DRIVER_SESSION_TTL)

@@ -22,7 +22,7 @@ from app.settings import (
     WEBHOOK_URL,
 )
 
-queue = asyncio.Queue()  # type: ignore
+queue: asyncio.Queue = asyncio.Queue()  # type: ignore
 
 
 async def on_startup(dp: Dispatcher) -> None:

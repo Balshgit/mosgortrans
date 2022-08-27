@@ -4,7 +4,7 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.parse_web import get_driver, parse_site
+from app.core.parse_web import get_driver, parse_yandex_maps
 from app.settings import TELEGRAM_API_TOKEN
 
 bot = Bot(token=TELEGRAM_API_TOKEN)
@@ -37,10 +37,9 @@ async def home_office(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
     driver = get_driver()
-    text = parse_site(
+    text = parse_yandex_maps(
         driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
         message='Остановка Б. Академическая ул, д. 15',
     )
 
@@ -54,10 +53,9 @@ async def office_home(
     query: types.CallbackQuery, callback_data: dict[str, str]
 ) -> types.Message:
     driver = get_driver()
-    text = parse_site(
+    text = parse_yandex_maps(
         driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?'
-        'l=masstransit&ll=37.505338%2C55.800160&tab=overview&z=211',
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?ll=37.505402%2C55.800214&tab=overview&z=21',
         message='Остановка Улица Алабяна',
     )
 
@@ -80,10 +78,9 @@ async def echo(message: types.Message) -> types.Message:
 
 async def morning_bus_mailing(chat_ids: list[int]) -> None:
     driver = get_driver()
-    text = parse_site(
+    text = parse_yandex_maps(
         driver=driver,
-        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/'
-        '?l=masstransit&ll=37.527754%2C55.823507&tab=overview&z=21',
+        url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
         message='Остановка Б. Академическая ул, д. 15',
     )
     await asyncio.gather(
