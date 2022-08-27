@@ -61,11 +61,12 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
     bus_300, bus_t19 = None, None
     bus_300_arrival, bus_t19_arrival = None, None
 
-    try:
-        elements = driver.find_elements(
-            by='class name', value='masstransit-vehicle-snippet-view'
-        )
-        for element in elements:
+    elements = driver.find_elements(
+        by='class name', value='masstransit-brief-schedule-view'
+    )
+
+    for element in elements:
+        try:
             bus_300 = element.find_element(
                 by='css selector', value='[aria-label="300"]'
             )
@@ -78,18 +79,22 @@ def parse_site(url: str, message: str, driver: RemoteWebDriver | None = None) ->
             bus_t19_arrival = element.find_element(
                 by='class name', value='masstransit-prognoses-view__title-text'
             )
-    except NoSuchElementException:
-        pass
-    except StaleElementReferenceException:
-        pass
+        except NoSuchElementException:
+            pass
+        except StaleElementReferenceException:
+            pass
+    no_bus_at_all = True
     answer = f'{message}\n\n'
-    if not all([bus_300, bus_t19]) or not all([bus_300_arrival, bus_t19_arrival]):
-        return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
     if bus_300 and bus_300_arrival:
         answer += f'Автобус {bus_300.text} - {bus_300_arrival.text}\n'
+        no_bus_at_all = False
     if bus_t19 and bus_t19_arrival:
         answer += f'Автобус {bus_t19.text} - {bus_t19_arrival.text}'
-    return answer
+        no_bus_at_all = False
+    if not no_bus_at_all:
+        return answer
+    if no_bus_at_all:
+        return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
 
 
 @timed_cache(seconds=DRIVER_SESSION_TTL)
