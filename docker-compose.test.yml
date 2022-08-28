@@ -40,7 +40,7 @@ services:
         USER: root
     restart: unless-stopped
     environment:
-      LOCALTEST: ${LOCALTEST}
+      SELENOIDTEST: ${SELENOIDTEST}
     depends_on:
       - selenoid
     volumes:

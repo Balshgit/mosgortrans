@@ -24,7 +24,10 @@ killall python
 ```
 
 ## Tests
-docker-compose run bot python -m pytest tests/bot/test_bot.py::test_selenoid_text
+
+```bash
+SELENOIDTEST=1 docker-compose -f docker-compose.test.yml run bot python -m pytest tests/bot/test_bot_selenoid.py::test_selenoid_text -vv
+```
 
 ## Help article
 

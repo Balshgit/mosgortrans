@@ -1,7 +1,7 @@
 """"
 Dict data set for Telegram message types
 """
-from typing import Any, NamedTuple
+from typing import NamedTuple
 
 
 class User(NamedTuple):
@@ -12,8 +12,13 @@ class User(NamedTuple):
     username: str | None
     language_code: str
 
-    def as_dict(self) -> dict[str, Any]:
-        return self._asdict()
+
+class Chat(NamedTuple):
+    id: int
+    first_name: str | None
+    last_name: str | None
+    username: str
+    type: str
 
 
 USER = {
