@@ -53,7 +53,6 @@ async def test_selenoid_text(dispatcher_fixture: Dispatcher, faker: Faker) -> No
     }
     TransportBot.bot = dispatcher_fixture.bot
 
-    # @mock.patch('app.core.bot.TransportBot.bot.send_message')
     with mock.patch(
         'app.core.bot.TransportBot.bot.send_message',
         return_value=data['message']['chat'],

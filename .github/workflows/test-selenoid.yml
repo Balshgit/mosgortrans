@@ -1,4 +1,4 @@
-name: Test-selenoid
+name: selenoid
 on:
   pull_request:
   push:
