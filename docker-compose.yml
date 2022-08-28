@@ -22,8 +22,6 @@ services:
       context: .
       dockerfile: ./deploy/Dockerfile.selenoid
     restart: unless-stopped
-    environment:
-      - SESSION_TIMED_OUT=30s
     networks:
       transport_bot_network:
         ipv4_address: 200.20.0.10

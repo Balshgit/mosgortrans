@@ -9,32 +9,30 @@ networks:
         - subnet: 200.20.0.0/24
 
 services:
-  selenoid:
+  test-selenoid:
     container_name: "transport_bot_selenoid"
     hostname: "selenoid_host"
     build:
-      context: .
+      context: ..
       dockerfile: ./deploy/Dockerfile.selenoid
     restart: unless-stopped
-    environment:
-      - SESSION_TIMED_OUT=30s
     networks:
       transport_bot_network:
         ipv4_address: 200.20.0.10
     volumes:
-      - ./deploy/browsers.json:/etc/selenoid/browsers.json:ro
+      - ../deploy/browsers.json:/etc/selenoid/browsers.json:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: ["-conf", "/etc/selenoid/browsers.json", "-limit", "10",
               "-container-network", "transport_bot_network", "-timeout", "30s"]
     expose:
       - "4444"
 
-  bot:
+  test-bot:
     container_name: "transport_bot"
     hostname: "transport_bot"
     image: "transport_bot:latest"
     build:
-      context: .
+      context: ..
       dockerfile: ./deploy/Dockerfile.bot
       args:
         USER: root
@@ -42,7 +40,7 @@ services:
     environment:
       SELENOIDTEST: ${SELENOIDTEST}
     depends_on:
-      - selenoid
+      - test-selenoid
     volumes:
       - /etc/localtime:/etc/localtime:ro
     networks:

@@ -15,4 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Run tests
-      run: docker-compose -f docker-compose.test.yml run bot python -m pytest tests/bot/test_bot_selenoid.py -vv
+      run: |
+        cd tests
+        docker-compose run test-bot python -m pytest tests/bot/test_bot_selenoid.py -vv
