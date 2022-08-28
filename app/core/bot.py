@@ -5,7 +5,7 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
-from app.core.parse_web import get_driver, parse_yandex_maps
+from app.core.parse_web import WebParser
 from app.settings import TELEGRAM_API_TOKEN
 
 
@@ -14,7 +14,6 @@ class TransportBot:
     bot: Bot = Bot(TELEGRAM_API_TOKEN)
     dispatcher: Dispatcher = Dispatcher(bot)
     dispatcher.middleware.setup(LoggingMiddleware())
-
     stations_cb: CallbackData = CallbackData('station', 'direction')
 
     @staticmethod
@@ -46,8 +45,8 @@ class TransportBot:
     async def home_office(
         query: types.CallbackQuery, callback_data: dict[str, str]
     ) -> types.Message:
-        driver = get_driver()
-        text = parse_yandex_maps(
+        driver = WebParser.get_driver()
+        text = WebParser.parse_yandex_maps(
             driver=driver,
             url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
             message='Остановка Б. Академическая ул, д. 15',
@@ -62,8 +61,8 @@ class TransportBot:
     async def office_home(
         query: types.CallbackQuery, callback_data: dict[str, str]
     ) -> types.Message:
-        driver = get_driver()
-        text = parse_yandex_maps(
+        driver = WebParser.get_driver()
+        text = WebParser.parse_yandex_maps(
             driver=driver,
             url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?ll=37.505402%2C55.800214&tab=overview&z=21',
             message='Остановка Улица Алабяна',
@@ -87,8 +86,8 @@ class TransportBot:
         if not chat_ids:
             return None
 
-        driver = get_driver()
-        text = parse_yandex_maps(
+        driver = WebParser.get_driver()
+        text = WebParser.parse_yandex_maps(
             driver=driver,
             url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
             message='Остановка Б. Академическая ул, д. 15',

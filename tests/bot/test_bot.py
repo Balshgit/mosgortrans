@@ -4,7 +4,7 @@ import pytest
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters.builtin import Command
 from aiogram.types import Update
-from app.core.bot import dispatcher
+from app.core.bot import TransportBot
 from tests.conftest import FakeTelegram
 from tests.data.factories import UserFactory
 
@@ -25,8 +25,8 @@ async def test_parse_yandex_maps(bot: Bot) -> None:
 
 async def test_command1(bot: Bot) -> None:
 
-    dispatcher.bot = bot
-    handlers = dispatcher.message_handlers.handlers
+    TransportBot.dispatcher.bot = bot
+    handlers = TransportBot.dispatcher.message_handlers.handlers
     for handler in handlers:
         handl = list(
             filter(lambda obj: isinstance(obj.filter, Command), handler.filters)
@@ -66,5 +66,4 @@ async def test_update(dispatcher_fixture: Dispatcher, bot: Bot) -> None:
         update = Update(**data)
         dispatcher_fixture.message_handler()
         await dispatcher_fixture.process_update(update)
-
     assert True
