@@ -1,11 +1,5 @@
 version: '3.9'
 
-volumes:
-  transport_bot_caddy-config:
-    name: transport_bot_caddy-config
-  transport_bot_caddy-data:
-    name: transport_bot_caddy-data
-
 networks:
   transport_bot_network:
     name:
@@ -43,8 +37,10 @@ services:
       context: .
       dockerfile: ./deploy/Dockerfile.bot
       args:
-        USER: web
+        USER: root
     restart: unless-stopped
+    environment:
+      LOCALTEST: ${LOCALTEST}
     depends_on:
       - selenoid
     volumes:
@@ -55,24 +51,3 @@ services:
     expose:
       - "8084"
     command: bash start-bot.sh
-
-
-  caddy:
-    image: "caddy:2.5.2"
-    container_name: transport_bot_caddy
-    hostname: transport_bot_caddy
-    restart: unless-stopped
-    env_file:
-      - app/config/.env
-    ports:
-      - '8084:8084'
-    depends_on:
-      - bot
-      - selenoid
-    volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - transport_bot_caddy-data:/data
-      - transport_bot_caddy-config:/config
-    networks:
-      transport_bot_network:
-        ipv4_address: 200.20.0.12
