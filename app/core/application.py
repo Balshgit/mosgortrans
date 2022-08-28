@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from aiogram import Dispatcher
 from aiogram.utils.executor import start_polling
 from aiohttp import web
-from app.core.bot import bot, dispatcher
+from app.core.bot import TransportBot
 from app.core.routes import Handler
 from app.core.scheduler import BotScheduler, bot_scheduler
 from app.core.utils import logger
@@ -18,7 +18,7 @@ class Application:
 
     async def _on_startup(self, dp: Dispatcher) -> None:
         logger.info("Start bot with webhook")
-        await bot.set_webhook(WEBHOOK_URL)
+        await TransportBot.bot.set_webhook(WEBHOOK_URL)
         loop = asyncio.get_running_loop()
         loop.create_task(self.handler.get_updates_from_queue())
         logger.info(
@@ -32,9 +32,9 @@ class Application:
         logger.warning('Shutting down..')
 
         # Remove webhook (not acceptable in some cases)
-        await bot.delete_webhook()
+        await TransportBot.bot.delete_webhook()
 
-        session = await bot.get_session()
+        session = await TransportBot.bot.get_session()
         if session and not session.closed:
             await session.close()
             await asyncio.sleep(0.2)
@@ -45,7 +45,7 @@ class Application:
     def bot_polling() -> None:
         logger.info("Start bot in polling mode")
         start_polling(
-            dispatcher=dispatcher,
+            dispatcher=TransportBot.dispatcher,
             skip_updates=True,
         )
 

@@ -4,8 +4,14 @@ PY_TARGET_FILES=
 PORT=8000
 
 .PHONY: app
-app:
-	poetry run python app/main.py
+app-up:
+	docker-compose up -d --build
+
+app-down:
+	docker-compose down -v
+
+app-clean:
+	docker-compose down -v && docker-clean run
 
 # standard commands to run on every commit
 format:

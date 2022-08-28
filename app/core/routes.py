@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from aiogram.types import Update
 from aiohttp import web
-from app.core.bot import dispatcher
+from app.core.bot import TransportBot
 
 
 class Handler:
@@ -16,10 +16,7 @@ class Handler:
 
     async def put_updates_on_queue(self, request: web.Request) -> web.Response:
         """
-        Listen {WEBHOOK_PATH} and proxy post request to bot
-
-        :param request:
-        :return:
+        Listen {WEBHOOK_PATH}/{TELEGRAM_WEB_TOKEN} path and proxy post request to bot
         """
         data = await request.json()
         tg_update = Update(**data)
@@ -30,5 +27,5 @@ class Handler:
     async def get_updates_from_queue(self) -> None:
         while True:
             update = await self.queue.get()
-            await dispatcher.process_update(update)
+            await TransportBot.dispatcher.process_update(update)
             await asyncio.sleep(0.1)
