@@ -30,4 +30,4 @@ WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=8084)
 
 START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default=False)
 
-DRIVER_SESSION_TTL = 28  # driver cache ttl session in seconds
+DRIVER_SESSION_TTL = 28  # selenium driver session cache ttl in seconds
