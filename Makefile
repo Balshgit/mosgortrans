@@ -10,7 +10,7 @@ app-up:
 app-down:
 	docker-compose down -v
 
-app-clean:
+app-cleanup:
 	docker-compose down -v && docker-clean run
 
 # standard commands to run on every commit

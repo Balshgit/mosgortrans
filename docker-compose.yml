@@ -21,8 +21,6 @@ services:
     build:
       context: .
       dockerfile: ./deploy/Dockerfile.selenoid
-      args:
-        USER: web
     restart: unless-stopped
     environment:
       - SESSION_TIMED_OUT=30s
@@ -45,8 +43,12 @@ services:
       context: .
       dockerfile: ./deploy/Dockerfile.bot
       args:
-        USER: web
+        USER: root
     restart: unless-stopped
+    environment:
+      LOCALTEST: ${LOCALTEST}
+    depends_on:
+      - selenoid
     volumes:
       - /etc/localtime:/etc/localtime:ro
     networks:
@@ -57,7 +59,7 @@ services:
     command: bash start-bot.sh
 
 
-  telebot-caddy:
+  caddy:
     image: "caddy:2.5.2"
     container_name: transport_bot_caddy
     hostname: transport_bot_caddy

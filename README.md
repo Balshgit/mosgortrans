@@ -1,4 +1,5 @@
 # MosGotTrans bot
+Бот для получения расписания конкретных автобусов для конкретных остановок
 
 ## Install & Update
 
@@ -21,6 +22,9 @@ killall geckodriver
 killall firefox
 killall python
 ```
+
+## Tests
+docker-compose run bot python -m pytest tests/bot/test_bot.py::test_selenoid_text
 
 ## Help article
 
