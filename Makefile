@@ -11,7 +11,9 @@ app-down:
 	docker-compose down -v
 
 app-cleanup:
-	docker-compose down -v && docker-clean run
+	docker-compose -f tests/docker-compose.yml down -v;
+	docker-compose down -v;
+	docker-clean run
 
 # standard commands to run on every commit
 format:

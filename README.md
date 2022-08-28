@@ -1,6 +1,8 @@
 # MosGotTrans bot
 Бот для получения расписания конкретных автобусов для конкретных остановок
 
+Использует **Selenium** для парсинга сайта "яндекс карты" 
+
 ## Install & Update
 
 install service
@@ -15,7 +17,14 @@ udo rsync -a --delete --progress ~/mosgortrans/* /opt/mosgortrans/ --exclude .gi
 sudo systemctl start mosgortrans.service
 ```
 
-## Clean
+## Local start
+```bash
+python main.py
+```
+
+- change bash bot-start.sh to python main.py
+
+## Local development clean:
 
 ```bash
 killall geckodriver
@@ -40,5 +49,5 @@ SELENOIDTEST=1 docker-compose run test-bot python -m pytest tests/bot/test_bot_s
 
 - [x] Добавить очередь сообщений
 - [x] Исправить запуск локально
-- [ ] Добавить тестов
+- [x] Добавить тестов
 - [x] Close connection
