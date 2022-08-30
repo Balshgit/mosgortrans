@@ -69,5 +69,9 @@ async def test_selenoid_parse_yandex() -> None:
         driver=driver,
         url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
         message='Остановка Б. Академическая ул, д. 15',
+        buses=[
+            '300',
+            'т19',
+        ],
     )
     assert len(text) > 0

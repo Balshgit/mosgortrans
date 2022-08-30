@@ -57,7 +57,11 @@ class WebParser:
 
     @staticmethod
     def parse_yandex_maps(
-        url: str, message: str, driver: RemoteWebDriver | None = None
+        *,
+        url: str,
+        message: str,
+        buses: list[str],
+        driver: RemoteWebDriver | None = None,
     ) -> str:
         if not driver:
             logger.error('Driver is not configured')
@@ -81,26 +85,22 @@ class WebParser:
                         by='class name',
                         value='masstransit-prognoses-view__title-text',
                     )
-                    match bus.text:
-                        case "300":
-                            bus_arrival["Автобус 300"] = (
-                                bus_arrival_time.text if bus_arrival_time else None
-                            )
-                        case "т19":
-                            bus_arrival["Автобус Т19"] = (
-                                bus_arrival_time.text if bus_arrival_time else None
-                            )
+                    bus_arrival[bus.text] = (
+                        bus_arrival_time.text if bus_arrival_time else None
+                    )
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:
             pass
 
-        if not any(bus_arrival.values()):
-            return 'Автобусов 300 или Т19 не найдено. \n\nСмотри на карте :)'
+        if not any([bus_arrival.get(bus_name) for bus_name in buses]):
+            return f'Автобусов {", ".join(buses)} не найдено. \n\nСмотри на карте :)'
 
         answer = f'{message}\n\n'
-        for bus_name, arrival_time in bus_arrival.items():
-            answer += f'{bus_name} - {arrival_time}\n'
+        for bus_name in buses:
+            arrival_time = bus_arrival.get(bus_name)
+            if arrival_time:
+                answer += f'Автобус {bus_name} - {arrival_time}\n'
         return answer
 
     @staticmethod
