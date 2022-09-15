@@ -90,7 +90,9 @@ class TransportBot:
         )
 
     @staticmethod
-    async def morning_bus_mailing(chat_ids: list[int] | None) -> None:
+    async def morning_bus_mailing(
+        chat_ids: list[int] | None, show_keyboard: bool = False
+    ) -> None:
         if not chat_ids:
             return None
 
@@ -104,10 +106,15 @@ class TransportBot:
                 'т19',
             ],
         )
+        kwargs = {'reply_markup': TransportBot.get_keyboard()} if show_keyboard else {}
+
         await asyncio.gather(
             *[
                 TransportBot.bot.send_message(
-                    chat_id=chat_id, text=text, parse_mode=types.ParseMode.HTML
+                    chat_id=chat_id,
+                    text=text,
+                    parse_mode=types.ParseMode.HTML,
+                    **kwargs
                 )
                 for chat_id in chat_ids
             ]

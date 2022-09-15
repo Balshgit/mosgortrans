@@ -9,25 +9,32 @@ bot_cron_jobs = {
         'job': TransportBot.morning_bus_mailing,
         'cron': [
             {
-                'trigger': 'cron',
-                'day_of_week': 'mon-fri',
-                'hour': 8,
-                'minute': 59,
-                'second': 0,
+                'time': {
+                    'trigger': 'cron',
+                    'day_of_week': 'mon-fri',
+                    'hour': 8,
+                    'minute': 59,
+                    'second': 0,
+                },
             },
             {
-                'trigger': 'cron',
-                'day_of_week': 'mon-fri',
-                'hour': 9,
-                'minute': 4,
-                'second': 0,
+                'time': {
+                    'trigger': 'cron',
+                    'day_of_week': 'mon-fri',
+                    'hour': 9,
+                    'minute': 4,
+                    'second': 0,
+                },
             },
             {
-                'trigger': 'cron',
-                'day_of_week': 'mon-fri',
-                'hour': 9,
-                'minute': 9,
-                'second': 0,
+                'time': {
+                    'trigger': 'cron',
+                    'day_of_week': 'mon-fri',
+                    'hour': 9,
+                    'minute': 9,
+                    'second': 0,
+                },
+                'kwargs_per_job': {'show_keyboard': True},
             },
         ],
         'func_kwargs': {
@@ -54,7 +61,11 @@ class BotScheduler:
             return None
         for cron in cron_jobs['cron']:
             self.scheduler.add_job(
-                cron_jobs['job'], kwargs=cron_jobs.get('func_kwargs'), **cron
+                cron_jobs['job'],
+                kwargs=dict(
+                    **cron_jobs.get('func_kwargs'), **cron.get('kwargs_per_job', {})
+                ),
+                **cron['time'],
             )
             logger.info(f'Added scheduled job: {cron_jobs["job"].__name__} {cron}')
 
