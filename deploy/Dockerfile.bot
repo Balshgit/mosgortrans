@@ -47,7 +47,7 @@ RUN if [ "$USER" != "root" ]; then \
 COPY --chown="$USER":"$USER" ./poetry.lock ./pyproject.toml /app/
 
 # Installing requirements
-RUN poetry version \
+RUN poetry --version \
   && poetry run pip install -U pip \
   && poetry install \
     $(if [ "$USER" != 'root' ]; then echo '--no-dev'; fi) \
