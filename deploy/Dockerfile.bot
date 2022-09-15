@@ -30,7 +30,7 @@ RUN printf "================\n\nStart build app. USER is: "${USER}"\n\n=========
     sshpass \
   && pip install --upgrade pip \
   # Installing `poetry` package manager:
-  && pip install poetry \
+  && pip install poetry wheel\
   # Cleaning cache:
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean -y && rm -rf /var/lib/apt/lists/*
