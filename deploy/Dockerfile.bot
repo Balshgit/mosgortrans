@@ -13,7 +13,10 @@ ENV USER=${USER} \
   PIP_DEFAULT_TIMEOUT=100 \
   POETRY_VIRTUALENVS_CREATE=false \
   POETRY_CACHE_DIR='/var/cache/pypoetry' \
-  PATH="$PATH:/root/.poetry/bin"
+  PATH="$PATH:/root/.poetry/bin" \
+  DOCKER_CONTAINER=1 \
+  POETRY_VERSION=1.3.1
+
 
 RUN printf "================\n\nStart build app. USER is: "${USER}"\n\n===============\n" \
   && apt-get update \
@@ -30,7 +33,7 @@ RUN printf "================\n\nStart build app. USER is: "${USER}"\n\n=========
     sshpass \
   && pip install --upgrade pip \
   # Installing `poetry` package manager:
-  && pip install poetry wheel\
+  && pip install poetry==$POETRY_VERSION wheel \
   # Cleaning cache:
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean -y && rm -rf /var/lib/apt/lists/*
