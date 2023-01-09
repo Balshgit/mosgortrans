@@ -50,7 +50,7 @@ COPY --chown="$USER":"$USER" ./poetry.lock ./pyproject.toml /app/
 RUN poetry --version \
   && poetry run pip install -U pip \
   && poetry install \
-    $(if [ "$USER" != 'root' ]; then echo '--no-dev'; fi) \
+    $(if [ "$USER" != 'root' ]; then echo '--only main'; fi) \
     --no-interaction --no-ansi \
   # Cleaning poetry installation's cache for production:
   && if [ "$USER" != 'root' ]; then rm -rf "$POETRY_CACHE_DIR"; fi
