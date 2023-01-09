@@ -13,7 +13,7 @@ env_path = BASE_DIR.joinpath('config')
 config = AutoConfig(search_path=env_path)
 
 
-GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION', default='0.31.0')
+GECKO_DRIVER_VERSION = config('GECKO_DRIVER_VERSION', default='0.32.0')
 
 TELEGRAM_API_TOKEN = config(
     'TELEGRAM_API_TOKEN', default='123456789:AABBCCDDEEFFaabbccddeeff-1234567890'

@@ -56,7 +56,7 @@ services:
 
 
   caddy:
-    image: "caddy:2.5.2"
+    image: "caddy:2.6.2"
     container_name: transport_bot_caddy
     hostname: transport_bot_caddy
     restart: unless-stopped
