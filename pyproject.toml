@@ -5,7 +5,7 @@ description = "Bot to help with mosgortans"
 authors = ["Dmitry Afanasyev <Balshbox@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 aiogram = "^2.21"
 selenium = "^4.3.0"
 httpx = "^0.23.0"
