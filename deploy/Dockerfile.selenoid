@@ -1,4 +1,4 @@
-FROM selenoid/firefox:108.0 as builder
+FROM selenoid/firefox:110.0 as builder
 
 FROM aerokube/selenoid:latest-release
 
