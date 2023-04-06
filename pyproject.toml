@@ -69,7 +69,7 @@ flake8-tidy-imports = "^4.8"
 [tool.isort]
 profile = "black"
 multi_line_output = 3
-src_paths = ["app",]
+src_paths = ["app", "tests"]
 combine_as_imports = true
 
 

@@ -1,5 +1,6 @@
 import factory
 from faker import Faker
+
 from tests.data.models import Chat, User
 
 faker = Faker('ru_RU')

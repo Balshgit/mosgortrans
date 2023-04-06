@@ -4,6 +4,7 @@ import pytest
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.filters.builtin import Command
 from aiogram.types import Update
+
 from app.core.bot import TransportBot
 from tests.conftest import FakeTelegram
 from tests.data.factories import ChatFactory, UserFactory
@@ -24,7 +25,6 @@ async def test_get_me_from_bot(bot: Bot) -> None:
 
 
 async def test_command1(bot: Bot) -> None:
-
     TransportBot.dispatcher.bot = bot
     handlers = TransportBot.dispatcher.message_handlers.handlers
     commands = []
@@ -38,7 +38,6 @@ async def test_command1(bot: Bot) -> None:
 
 
 async def test_update(dispatcher_fixture: Dispatcher) -> None:
-
     data = {
         'update_id': 957250703,
         'message': {

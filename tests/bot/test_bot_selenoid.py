@@ -3,9 +3,10 @@ from unittest import mock
 
 import pytest
 from aiogram import Dispatcher, types
+from faker import Faker
+
 from app.core.bot import TransportBot
 from app.core.parse_web import WebParser
-from faker import Faker
 from tests.conftest import FakeTelegram
 from tests.data.factories import ChatFactory, UserFactory
 
