@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from aiogram import Dispatcher
 from aiogram.utils.executor import start_polling
 from aiohttp import web
+
 from app.core.bot import TransportBot
 from app.core.routes import Handler
 from app.core.scheduler import BotScheduler, bot_scheduler
@@ -37,7 +38,7 @@ class Application:
         session = await TransportBot.bot.get_session()
         if session and not session.closed:
             await session.close()
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0)
 
         logger.warning('Bye!')
 

@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from aiogram.types import Update
 from aiohttp import web
+
 from app.core.bot import TransportBot
 
 
@@ -28,4 +29,4 @@ class Handler:
         while True:
             update = await self.queue.get()
             await TransportBot.dispatcher.process_update(update)
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0)

@@ -1,11 +1,14 @@
 {
-    "firefox": {
+    "chrome": {
         "default": "111.0",
         "versions": {
             "111.0": {
-                "image": "selenoid/firefox:111.0",
+                "image": "selenoid/chrome:111.0",
                 "port": "4444",
-                "path": "/wd/hub"
+                "path": "/",
+                "tmpfs": {
+                    "/tmp": "size=128m"
+                }
             }
         }
     }

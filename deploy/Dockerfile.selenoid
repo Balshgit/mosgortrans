@@ -1,4 +1,0 @@
-FROM selenoid/firefox:111.0 as builder
-
-FROM aerokube/selenoid:1.10.10
-

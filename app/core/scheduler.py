@@ -1,8 +1,9 @@
 from typing import Any
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 from app.core.bot import TransportBot
 from app.core.utils import logger
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 bot_cron_jobs = {
     'morning_home->work_bus': {

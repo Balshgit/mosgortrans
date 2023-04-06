@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 
 import aresponses
-import pytest
+import pytest_asyncio
 from aiogram import Bot, Dispatcher
 
 BOT_ID = 123456789
@@ -51,7 +51,7 @@ class FakeTelegram(aresponses.ResponsesMockServer):
         return _body, _headers
 
 
-@pytest.fixture(name='bot')
+@pytest_asyncio.fixture(name='bot')
 async def bot_fixture() -> Bot:
     """Bot fixture."""
 
@@ -63,7 +63,7 @@ async def bot_fixture() -> Bot:
         await asyncio.sleep(0.2)
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 async def dispatcher_fixture(bot: Bot) -> Dispatcher:
     """Dispatcher fixture."""
 

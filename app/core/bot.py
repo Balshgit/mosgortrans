@@ -5,6 +5,7 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.callback_data import CallbackData
+
 from app.core.parse_web import WebParser
 from app.settings import TELEGRAM_API_TOKEN
 

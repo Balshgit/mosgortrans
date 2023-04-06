@@ -20,7 +20,7 @@ format:
 	autoflake --recursive --ignore-init-module-imports --remove-all-unused-imports --remove-unused-variables --in-place $(PY_TARGET_DIRS)
 	pyupgrade --keep-runtime-typing $(PY_TARGET_FILES)
 	isort --color --quiet $(PY_TARGET_DIRS)
-	black $(PY_TARGET_DIRS) -S
+	black $(PY_TARGET_DIRS) -S -v
 
 check-style:
 	black --check $(PY_TARGET_DIRS) -S --diff --color

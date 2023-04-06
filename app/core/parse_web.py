@@ -1,67 +1,25 @@
-import os
-import tarfile
 import time
 from collections import defaultdict
-from pathlib import Path
 
-import wget
-from app.core.utils import logger, timed_cache
-from app.settings import BASE_DIR, DRIVER_SESSION_TTL, GECKO_DRIVER_VERSION
 from selenium import webdriver
 from selenium.common.exceptions import (
     NoSuchElementException,
     StaleElementReferenceException,
-    WebDriverException,
 )
-from selenium.webdriver.firefox import options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.webdriver import RemoteWebDriver, WebDriver
+from selenium.webdriver.remote.webdriver import WebDriver
+
+from app.core.utils import logger, timed_cache
+from app.settings import DRIVER_SESSION_TTL
 
 
 class WebParser:
-    @staticmethod
-    def download_gecko_driver() -> None:
-        gecko_driver_url = (
-            f'https://github.com/mozilla/geckodriver/releases/download/v{GECKO_DRIVER_VERSION}/'
-            f'geckodriver-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
-        )
-
-        if not Path(BASE_DIR / 'geckodriver').exists():
-            logger.info(f'Downloading gecodriver v {GECKO_DRIVER_VERSION}...')
-            geckodriver_file = wget.download(
-                url=gecko_driver_url, out=BASE_DIR.resolve().as_posix()
-            )
-
-            with tarfile.open(geckodriver_file) as tar:
-                tar.extractall(BASE_DIR)
-            os.remove(
-                f'{BASE_DIR / "geckodriver"}-v{GECKO_DRIVER_VERSION}-linux64.tar.gz'
-            )
-            logger.info(f'\ngeckodriver has been downloaded to folder {BASE_DIR}')
-
-    @staticmethod
-    def configure_firefox_driver(private_window: bool = False) -> WebDriver | None:
-        opt = options.Options()
-        opt.headless = True
-        opt.add_argument('-profile')
-        opt.add_argument(f'{Path.home()}/snap/firefox/common/.mozilla/firefox')
-        if private_window:
-            opt.set_preference("browser.privatebrowsing.autostart", True)
-        service = Service(executable_path=(BASE_DIR / 'geckodriver').as_posix())
-        try:
-            firefox_driver = webdriver.Firefox(service=service, options=opt)
-            return firefox_driver
-        except WebDriverException:
-            logger.error('Error configuring webdriver. Possible it already configured')
-            return None
-
     @staticmethod
     def parse_yandex_maps(
         *,
         url: str,
         message: str,
         buses: list[str],
-        driver: RemoteWebDriver | None = None,
+        driver: WebDriver | None = None,
     ) -> str:
         if not driver:
             logger.error('Driver is not configured')
@@ -105,10 +63,10 @@ class WebParser:
 
     @staticmethod
     @timed_cache(seconds=DRIVER_SESSION_TTL)
-    def get_driver() -> RemoteWebDriver:
-        opt = options.Options()
-        opt.headless = True
-        driver = RemoteWebDriver(
+    def get_driver() -> WebDriver:
+        opt = webdriver.ChromeOptions()
+        opt.add_argument('--headless')
+        driver = webdriver.Remote(
             command_executor='http://selenoid_host:4444/wd/hub', options=opt
         )
         return driver

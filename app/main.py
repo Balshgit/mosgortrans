@@ -15,7 +15,6 @@ async def create_app() -> web.Application:
 
 
 if __name__ == '__main__':
-
     application = Application()
     app = application.create_app()
 

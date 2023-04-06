@@ -3,22 +3,20 @@ version: '3.9'
 networks:
   transport_bot_network:
     name:
-      "transport_bot_network"
+      "test_transport_bot_network"
     ipam:
       config:
-        - subnet: 200.20.0.0/24
+        - subnet: 200.10.0.0/24
 
 services:
   test-selenoid:
-    container_name: "transport_bot_selenoid"
+    image: "aerokube/selenoid:1.10.10"
+    container_name: "test_transport_bot_selenoid"
     hostname: "selenoid_host"
-    build:
-      context: ..
-      dockerfile: ./deploy/Dockerfile.selenoid
     restart: unless-stopped
     networks:
       transport_bot_network:
-        ipv4_address: 200.20.0.10
+        ipv4_address: 200.10.0.10
     volumes:
       - ../deploy/browsers.json:/etc/selenoid/browsers.json:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -27,13 +25,16 @@ services:
     expose:
       - "4444"
 
+  test-browser:
+    image: "selenoid/chrome:111.0"
+    container_name: "test_transport_bot_browser"
+
   test-bot:
-    container_name: "transport_bot"
-    hostname: "transport_bot"
+    container_name: "test_transport_bot"
     image: "transport_bot:latest"
     build:
       context: ..
-      dockerfile: ./deploy/Dockerfile.bot
+      dockerfile: ../deploy/Dockerfile
       args:
         USER: root
     restart: unless-stopped
@@ -41,11 +42,9 @@ services:
       SELENOIDTEST: ${SELENOIDTEST}
     depends_on:
       - test-selenoid
+      - test-browser
     volumes:
       - /etc/localtime:/etc/localtime:ro
     networks:
       transport_bot_network:
-        ipv4_address: 200.20.0.11
-    expose:
-      - "8084"
-    command: bash start-bot.sh
+        ipv4_address: 200.10.0.11
