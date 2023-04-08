@@ -30,6 +30,7 @@ WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=8084)
 
 START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default=False)
 
-CHAT_IDS = config('CHAT_IDS', cast=Csv(int), default=[])  # chat ids for scheduler tasks
+# chat ids for scheduler tasks
+CHAT_IDS = config('CHAT_IDS', cast=Csv(int)) if config('CHAT_IDS', default=None) else []
 
 DRIVER_SESSION_TTL = 28  # selenium driver session cache ttl in seconds
