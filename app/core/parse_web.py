@@ -15,15 +15,14 @@ from app.settings import DRIVER_SESSION_TTL
 class WebParser:
     @staticmethod
     def parse_yandex_maps(
-        *,
         url: str,
         message: str,
         buses: list[str],
-        driver: WebDriver | None = None,
+        driver: WebDriver | None,
     ) -> str:
         if not driver:
-            logger.error('Driver is not configured')
-            return 'Что-то пошло не так. :( Драйвер Firefox не сконфигурирован.'
+            logger.error('Web driver is not configured')
+            return 'Что-то пошло не так. :( Веб драйвер не сконфигурирован.'
 
         driver.get(url)
         time.sleep(1)
@@ -63,7 +62,7 @@ class WebParser:
 
     @staticmethod
     @timed_cache(seconds=DRIVER_SESSION_TTL)
-    def get_driver() -> WebDriver:
+    def get_driver() -> WebDriver | None:
         opt = webdriver.ChromeOptions()
         opt.add_argument('--headless')
         driver = webdriver.Remote(

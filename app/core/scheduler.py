@@ -4,6 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.core.bot import TransportBot
 from app.core.utils import logger
+from settings import CHAT_IDS
 
 bot_cron_jobs = {
     'morning_home->work_bus': {
@@ -39,10 +40,7 @@ bot_cron_jobs = {
             },
         ],
         'func_kwargs': {
-            'chat_ids': [
-                417070387,  # me
-                # 431571617,  # Lenok
-            ]
+            'chat_ids': CHAT_IDS,
         },
     }
 }

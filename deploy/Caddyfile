@@ -4,8 +4,8 @@
     # Removing some headers for improved security:
     header -Server
 
-    route /transport/* {
-      reverse_proxy transport_bot:8084
+    route {$WEBHOOK_PATH}/* {
+      reverse_proxy transport_bot:8080
     }
 }
 

@@ -1,4 +1,5 @@
 import asyncio
+from concurrent.futures.thread import ThreadPoolExecutor
 from dataclasses import dataclass
 
 from aiogram import Bot, types
@@ -8,6 +9,8 @@ from aiogram.utils.callback_data import CallbackData
 
 from app.core.parse_web import WebParser
 from app.settings import TELEGRAM_API_TOKEN
+
+executor = ThreadPoolExecutor(10)
 
 
 @dataclass
@@ -46,16 +49,14 @@ class TransportBot:
     async def home_office(
         query: types.CallbackQuery, callback_data: dict[str, str]
     ) -> types.Message:
-        driver = WebParser.get_driver()
-        text = WebParser.parse_yandex_maps(
-            driver=driver,
-            url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
-            message='Остановка Б. Академическая ул, д. 15',
-            buses=[
-                '300',
-                'т19',
-            ],
-        )
+        url = 'https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21'
+        message = 'Остановка Б. Академическая ул, д. 15'
+        buses = [
+            '300',
+            'т19',
+        ]
+
+        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
 
         return await TransportBot.bot.send_message(
             query.message.chat.id, text, reply_markup=TransportBot.get_keyboard()
@@ -66,16 +67,14 @@ class TransportBot:
     async def office_home(
         query: types.CallbackQuery, callback_data: dict[str, str]
     ) -> types.Message:
-        driver = WebParser.get_driver()
-        text = WebParser.parse_yandex_maps(
-            driver=driver,
-            url='https://yandex.ru/maps/213/moscow/stops/stop__9640288/?ll=37.505402%2C55.800214&tab=overview&z=21',
-            message='Остановка Улица Алабяна',
-            buses=[
-                '300',
-                'т19',
-            ],
-        )
+        url = 'https://yandex.ru/maps/213/moscow/stops/stop__9640288/?ll=37.505402%2C55.800214&tab=overview&z=21'
+        message = 'Остановка Улица Алабяна'
+        buses = [
+            '300',
+            'т19',
+        ]
+
+        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
 
         return await TransportBot.bot.send_message(
             query.message.chat.id, text, reply_markup=TransportBot.get_keyboard()
@@ -97,16 +96,15 @@ class TransportBot:
         if not chat_ids:
             return None
 
-        driver = WebParser.get_driver()
-        text = WebParser.parse_yandex_maps(
-            driver=driver,
-            url='https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21',
-            message='Остановка Б. Академическая ул, д. 15',
-            buses=[
-                '300',
-                'т19',
-            ],
-        )
+        url = 'https://yandex.ru/maps/213/moscow/stops/stop__9640740/?ll=37.527924%2C55.823470&tab=overview&z=21'
+        message = 'Остановка Б. Академическая ул, д. 15'
+        buses = [
+            '300',
+            'т19',
+        ]
+
+        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
+
         kwargs = {'reply_markup': TransportBot.get_keyboard()} if show_keyboard else {}
 
         await asyncio.gather(
@@ -119,4 +117,12 @@ class TransportBot:
                 )
                 for chat_id in chat_ids
             ]
+        )
+
+    @staticmethod
+    async def _get_buses_data(url: str, message: str, buses: list[str]) -> str:
+        driver = WebParser.get_driver()
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            executor, WebParser.parse_yandex_maps, url, message, buses, driver
         )

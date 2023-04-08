@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from decouple import AutoConfig
+from decouple import AutoConfig, Csv
 
 # Build paths inside the project like this: BASE_DIR.joinpath('some')
 # `pathlib` is better than writing: dirname(dirname(dirname(__file__)))
@@ -29,5 +29,7 @@ WEBAPP_HOST = config('WEBAPP_HOST', default='127.0.0.1')  # or ip
 WEBAPP_PORT = config('WEBAPP_PORT', cast=int, default=8084)
 
 START_WITH_WEBHOOK = config('START_WITH_WEBHOOK', cast=bool, default=False)
+
+CHAT_IDS = config('CHAT_IDS', cast=Csv(int), default=[])  # chat ids for scheduler tasks
 
 DRIVER_SESSION_TTL = 28  # selenium driver session cache ttl in seconds
