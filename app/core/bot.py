@@ -56,7 +56,7 @@ class TransportBot:
             'т19',
         ]
 
-        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
+        text = await TransportBot.get_buses_data(url=url, message=message, buses=buses)
 
         return await TransportBot.bot.send_message(
             query.message.chat.id, text, reply_markup=TransportBot.get_keyboard()
@@ -74,7 +74,7 @@ class TransportBot:
             'т19',
         ]
 
-        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
+        text = await TransportBot.get_buses_data(url=url, message=message, buses=buses)
 
         return await TransportBot.bot.send_message(
             query.message.chat.id, text, reply_markup=TransportBot.get_keyboard()
@@ -103,7 +103,7 @@ class TransportBot:
             'т19',
         ]
 
-        text = await TransportBot._get_buses_data(url=url, message=message, buses=buses)
+        text = await TransportBot.get_buses_data(url=url, message=message, buses=buses)
 
         kwargs = {'reply_markup': TransportBot.get_keyboard()} if show_keyboard else {}
 
@@ -120,7 +120,7 @@ class TransportBot:
         )
 
     @staticmethod
-    async def _get_buses_data(url: str, message: str, buses: list[str]) -> str:
+    async def get_buses_data(url: str, message: str, buses: list[str]) -> str:
         driver = WebParser.get_driver()
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
