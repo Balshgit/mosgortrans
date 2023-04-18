@@ -27,7 +27,7 @@ class Application:
                 TELEGRAM_API_TOKEN, '{TELEGRAM_API_TOKEN}'
             )
         )
-        bot_scheduler.start()
+        self.scheduler.start()
 
     async def _on_shutdown(self, dp: Dispatcher) -> None:
         logger.warning('Shutting down..')

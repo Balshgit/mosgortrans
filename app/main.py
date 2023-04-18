@@ -21,4 +21,5 @@ if __name__ == '__main__':
     if START_WITH_WEBHOOK:
         web.run_app(app=app, host=WEBAPP_HOST, port=WEBAPP_PORT)
     else:
+        application.scheduler.start()
         application.bot_polling()

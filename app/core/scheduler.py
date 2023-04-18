@@ -47,12 +47,13 @@ bot_cron_jobs = {
 
 
 class BotScheduler:
+    scheduler = AsyncIOScheduler()
+
     def __init__(
         self,
         cron_jobs: dict[str, dict[str, Any]],
     ):
         self.cron_jobs = cron_jobs
-        self.scheduler = AsyncIOScheduler()
 
     def add_scheduler_jobs(self, jobs_name: str) -> None:
         cron_jobs = self.cron_jobs.get(jobs_name)
