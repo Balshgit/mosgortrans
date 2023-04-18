@@ -22,7 +22,16 @@ sudo systemctl start mosgortrans.service
 python main.py
 ```
 
-- change bash bot-start.sh to python main.py
+- set `START_WITH_WEBHOOK` to blank
+
+## Delete or set webhook manually
+
+url: https://api.telegram.org/bot{TELEGRAM_TOKEN}/{method}Webhook?url={WEBHOOK_URL}
+
+methods:
+- delete
+- set
+
 
 ## Local development clean:
 
