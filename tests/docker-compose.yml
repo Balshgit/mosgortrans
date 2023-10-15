@@ -10,7 +10,7 @@ networks:
 
 services:
   test-selenoid:
-    image: "aerokube/selenoid:1.10.10"
+    image: "aerokube/selenoid:1.11.0"
     container_name: "test_transport_bot_selenoid"
     hostname: "selenoid_host"
     restart: unless-stopped
@@ -26,7 +26,7 @@ services:
       - "4444"
 
   test-browser:
-    image: "selenoid/chrome:111.0"
+    image: "selenoid/chrome:117.0"
     container_name: "test_transport_bot_browser"
 
   test-bot:

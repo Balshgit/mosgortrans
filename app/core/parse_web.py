@@ -50,7 +50,7 @@ class WebParser:
         except StaleElementReferenceException:
             pass
 
-        if not any([bus_arrival.get(bus_name) for bus_name in buses]):
+        if not any(bus_arrival.get(bus_name) for bus_name in buses):
             return f'Автобусов {", ".join(buses)} не найдено. \n\nСмотри на карте :)'
 
         answer = f'{message}\n\n'

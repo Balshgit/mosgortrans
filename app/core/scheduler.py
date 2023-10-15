@@ -63,7 +63,7 @@ class BotScheduler:
             self.scheduler.add_job(
                 cron_jobs['job'],
                 kwargs=dict(
-                    **cron_jobs.get('func_kwargs'), **cron.get('kwargs_per_job', {})
+                    **cron_jobs.get('func_kwargs'), **cron.get('kwargs_per_job', {})  # type: ignore
                 ),
                 **cron['time'],
             )

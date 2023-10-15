@@ -16,7 +16,7 @@ networks:
 
 services:
   selenoid:
-    image: "aerokube/selenoid:1.10.10"
+    image: "aerokube/selenoid:1.11.0"
     container_name: "transport_bot_selenoid"
     hostname: "selenoid_host"
     restart: unless-stopped
@@ -32,7 +32,7 @@ services:
       - "4444"
 
   browser:
-    image: "selenoid/chrome:111.0"
+    image: "selenoid/chrome:117.0"
     container_name: "transport_browser"
 
   bot:
@@ -60,7 +60,7 @@ services:
 
 
   caddy:
-    image: "caddy:2.6.4"
+    image: "caddy:2.7.5"
     container_name: transport_bot_caddy
     hostname: transport_bot_caddy
     restart: unless-stopped
