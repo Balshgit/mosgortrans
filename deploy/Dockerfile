@@ -1,4 +1,4 @@
-FROM python:3.11.6
+FROM python:3.11.7
 
 ARG USER
 
@@ -15,7 +15,7 @@ ENV USER=${USER} \
   POETRY_CACHE_DIR='/var/cache/pypoetry' \
   PATH="$PATH:/root/.poetry/bin" \
   DOCKER_CONTAINER=1 \
-  POETRY_VERSION=1.6.1
+  POETRY_VERSION=1.7.1
 
 
 RUN printf "================\n\nStart build app. USER is: "${USER}"\n\n===============\n" \
@@ -54,7 +54,7 @@ RUN poetry --version \
   && poetry run pip install -U pip \
   && poetry install \
     $(if [ "$USER" != 'root' ]; then echo '--only main'; fi) \
-    --no-interaction --no-ansi \
+    --no-interaction --no-ansi --no-root\
   # Cleaning poetry installation's cache for production:
   && if [ "$USER" != 'root' ]; then rm -rf "$POETRY_CACHE_DIR"; fi
 
